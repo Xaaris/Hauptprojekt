@@ -97,6 +97,9 @@ class YOLO(object):
         vehicle_boxes = []
         for i, class_name in enumerate(out_class_names):
             if class_name == "car" or class_name == "bus" or class_name == "truck":
-                vehicle_boxes.append(out_boxes[i].round())
+                box = out_boxes[i].round()
+                top, left, bottom, right = box
+                if bottom - top > 150 and right - left > 150:
+                    vehicle_boxes.append(box)
 
         return vehicle_boxes
