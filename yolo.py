@@ -2,7 +2,6 @@
 Class definition of YOLO_v3 style detection model on image and video
 """
 
-import colorsys
 import os
 
 import numpy as np
@@ -59,7 +58,7 @@ class YOLO(object):
         model_path = os.path.expanduser(self.model_path)
         assert model_path.endswith('.h5'), 'Keras model or weights must be a .h5 file.'
 
-        # Load model, or construct model and load weights.
+        # Load model
         num_anchors = len(self.anchors)
         num_classes = len(self.class_names)
         self.yolo_model = load_model(model_path, compile=False)
@@ -67,17 +66,6 @@ class YOLO(object):
                 num_classes + 5), 'Mismatch between model and given anchor and class sizes'
 
         print('{} model, anchors, and classes loaded.'.format(model_path))
-
-        # Generate colors for drawing bounding boxes.
-        hsv_tuples = [(x / len(self.class_names), 1., 1.)
-                      for x in range(len(self.class_names))]
-        self.colors = list(map(lambda x: colorsys.hsv_to_rgb(*x), hsv_tuples))
-        self.colors = list(
-            map(lambda x: (int(x[0] * 255), int(x[1] * 255), int(x[2] * 255)),
-                self.colors))
-        np.random.seed(10101)  # Fixed seed for consistent colors across runs.
-        np.random.shuffle(self.colors)  # Shuffle colors to decorrelate adjacent classes.
-        np.random.seed(None)  # Reset seed to default.
 
         # Generate output tensor targets for filtered bounding boxes.
         self.input_image_shape = K.placeholder(shape=(2,))
@@ -88,8 +76,6 @@ class YOLO(object):
         return boxes, scores, classes
 
     def detect_vehicle(self, image):
-        assert self.model_image_size[0] % 32 == 0, 'Multiples of 32 required'
-        assert self.model_image_size[1] % 32 == 0, 'Multiples of 32 required'
         resized_image = resize_image(image, self.model_image_size)
         image_data = np.array(resized_image, dtype='float32')
 
