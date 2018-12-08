@@ -51,7 +51,7 @@ def get_image_patch(image, box):
     return cv2.getRectSubPix(image, size, center)
 
 
-def show(image, label="bla"):
+def show(image, label="image"):
     cv2.imshow(label, image)
     cv2.waitKey()
 

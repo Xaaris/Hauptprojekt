@@ -87,7 +87,7 @@ class YOLO(object):
                                            self.input_image_shape, self.score, self.iou)
         return boxes, scores, classes
 
-    def detect_image(self, image):
+    def detect_vehicle(self, image):
         assert self.model_image_size[0] % 32 == 0, 'Multiples of 32 required'
         assert self.model_image_size[1] % 32 == 0, 'Multiples of 32 required'
         resized_image = resize_image(image, self.model_image_size)
