@@ -1,6 +1,8 @@
 """Miscellaneous utility functions."""
+import os
 
 import cv2
+from moviepy.video.io.VideoFileClip import VideoFileClip
 
 
 def letterbox_image(image, desired_size):
@@ -62,3 +64,11 @@ def save_debug_image(image, filename, folder=None):
     else:
         path = "debugImages/" + filename + ".png"
     cv2.imwrite(path, image)
+
+
+def get_frames(path_to_video, from_sec=0, to_sec=None):
+    fullpath = os.path.abspath(path_to_video)
+    video = VideoFileClip(fullpath, audio=False).subclip(from_sec, to_sec)
+    for frame in video.iter_frames():
+        color_corrected_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        yield color_corrected_frame
