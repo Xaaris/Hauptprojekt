@@ -1,11 +1,13 @@
 import math
 
-import cv2
+import cv2.cv2 as cv2
 import numpy as np
 
+from timer import timing
 from utils import show
 
 
+@timing
 class LicensePlateDetection:
 
     def __init__(self, image, aspect_ratio_range=(1.8, 8.5), morph_closing_shape=(36, 216), morph_opening_shape=(3, 3),
@@ -26,6 +28,7 @@ class LicensePlateDetection:
         self.min_plate_extend = min_extend
         self.plate_max_angle = max_angle
 
+    @timing
     def detect_license_plate(self, debug_mode=False):
         potential_plates = self.process_image(debug_mode)
         return self.find_best_plate(potential_plates)

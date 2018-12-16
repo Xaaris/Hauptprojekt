@@ -10,9 +10,11 @@ from keras.models import load_model
 from keras.utils import multi_gpu_model
 
 from model import yolo_eval
+from timer import timing
 from utils import resize_image
 
 
+@timing
 class YOLO(object):
     _defaults = {
         # "model_path": 'model_data/yolo.h5',
@@ -75,6 +77,7 @@ class YOLO(object):
                                            self.input_image_shape, self.score, self.iou)
         return boxes, scores, classes
 
+    @timing
     def detect_vehicle(self, image):
         resized_image = resize_image(image, self.model_image_size)
         image_data = np.array(resized_image, dtype='float32')

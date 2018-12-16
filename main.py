@@ -1,16 +1,17 @@
 import time
 
-import cv2
+import cv2.cv2 as cv2
 import numpy as np
 
 from LicensePlateDetection import LicensePlateDetection
+from timer import print_timing_results
 from utils import take_center_square, save_debug_image, get_image_patch, get_frames
 from yolo import YOLO
 
 if __name__ == "__main__":
     yolo = YOLO()
     start = time.time()
-    for frame_counter, frame in enumerate(get_frames("testFiles/IMG_2993.m4v", 0, 3)):
+    for frame_counter, frame in enumerate(get_frames("testFiles/IMG_2993.m4v", 0, 1)):
         frame = take_center_square(frame)
         frame_copy = np.copy(frame)
         vehicle_boxes = yolo.detect_vehicle(frame)
@@ -28,3 +29,4 @@ if __name__ == "__main__":
     fps = frame_counter / total_duration
     print("Total duration: " + str(total_duration) + "s, FPS: " + str(fps))
 
+print_timing_results()
