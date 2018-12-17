@@ -20,13 +20,12 @@ if __name__ == "__main__":
             image_copy = cv2.rectangle(frame_copy, (left, top), (right, bottom), (0, 0, 255), 2)
             car_image = get_image_patch(frame, vehicle_box)
             license_plate_detection = LicensePlateDetection(car_image)
-            plate = license_plate_detection.detect_license_plate()
-            if plate is not None:
-                cv2.drawContours(frame_copy, [plate], -1, (127, 0, 255), 2, offset=(left, top))
+            plate_candidates = license_plate_detection.detect_license_plate_candidates()
+            cv2.drawContours(frame_copy, plate_candidates, -1, (127, 0, 255), 2, offset=(left, top))
         save_debug_image(frame_copy, "frame_" + str(frame_counter), "processed_frames")
 
     total_duration = time.time() - start
     fps = frame_counter / total_duration
-    print("Total duration: " + str(total_duration) + "s, FPS: " + str(fps))
+    print("\nTotal duration: " + str(total_duration) + "s, FPS: " + str(fps))
 
 print_timing_results()

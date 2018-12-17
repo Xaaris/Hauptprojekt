@@ -33,6 +33,10 @@ class LicensePlateDetection:
         potential_plates = self.process_image(debug_mode)
         return self.find_best_plate(potential_plates)
 
+    @timing
+    def detect_license_plate_candidates(self, debug_mode=False):
+        return self.process_image(debug_mode)
+
     def process_image(self, debug_mode):
         result_plates = []
         working_image = np.copy(self.input_image)
@@ -64,18 +68,11 @@ class LicensePlateDetection:
         for contour in contours:
 
             if self.is_valid_contour(contour):
-
                 rect = cv2.minAreaRect(contour)
                 box = cv2.boxPoints(rect)
                 box = np.int0(box)  # cast float to long
 
-                angle = rect[2]
-                if angle < -45:
-                    angle += 90
-                pos_x = rect[0][0]
-                pos_y = rect[0][1]
-
-                result_plates.append([box, pos_x, pos_y, angle])
+                result_plates.append(box)
 
                 cv2.drawContours(tmp_img_for_valid_contours, [box], -1, (255, 0, 0), 1)
                 cv2.drawContours(tmp_img_for_valid_contours, contour, -1, (255, 0, 255), 2)
@@ -86,8 +83,8 @@ class LicensePlateDetection:
     def find_best_plate(self, plates):
         if len(plates) < 1:
             return None
-        sorted_plates = sorted(plates, key=lambda plate: abs(self.original_img_height * 0.66 - plate[2]))
-        return sorted_plates[0][0]
+        sorted_plates = sorted(plates, key=lambda plate: abs(self.original_img_height * 0.66 - plate[0][0]))
+        return sorted_plates[0]
 
     def is_valid_contour(self, contour):
         rect = cv2.minAreaRect(contour)
