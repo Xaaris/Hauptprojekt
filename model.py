@@ -11,15 +11,12 @@ def yolo_head(feats, anchors, num_classes, input_shape, calc_loss=False):
     anchors_tensor = K.reshape(K.constant(anchors), [1, 1, 1, num_anchors, 2])
 
     grid_shape = K.shape(feats)[1:3]  # height, width
-    grid_y = K.tile(K.reshape(K.arange(0, stop=grid_shape[0]), [-1, 1, 1, 1]),
-                    [1, grid_shape[1], 1, 1])
-    grid_x = K.tile(K.reshape(K.arange(0, stop=grid_shape[1]), [1, -1, 1, 1]),
-                    [grid_shape[0], 1, 1, 1])
+    grid_y = K.tile(K.reshape(K.arange(0, stop=grid_shape[0]), [-1, 1, 1, 1]), [1, grid_shape[1], 1, 1])
+    grid_x = K.tile(K.reshape(K.arange(0, stop=grid_shape[1]), [1, -1, 1, 1]), [grid_shape[0], 1, 1, 1])
     grid = K.concatenate([grid_x, grid_y])
     grid = K.cast(grid, K.dtype(feats))
 
-    feats = K.reshape(
-        feats, [-1, grid_shape[0], grid_shape[1], num_anchors, num_classes + 5])
+    feats = K.reshape(feats, [-1, grid_shape[0], grid_shape[1], num_anchors, num_classes + 5])
 
     # Adjust preditions to each spatial grid point and anchor size.
     box_xy = (K.sigmoid(feats[..., :2]) + grid) / K.cast(grid_shape[::-1], K.dtype(feats))
@@ -64,8 +61,11 @@ def yolo_boxes_and_scores(feats, anchors, num_classes, input_shape, image_shape)
     boxes = yolo_correct_boxes(box_xy, box_wh, input_shape, image_shape)
     boxes = K.reshape(boxes, [-1, 4])
     box_scores = box_confidence * box_class_probs
-    box_scores = K.reshape(box_scores, [-1, num_classes])
-    return boxes, box_scores
+    box_classes = K.argmax(box_scores, axis=-1)
+    box_classes = K.reshape(box_classes, [-1])
+    box_scores = K.max(box_scores, axis=-1)
+    box_scores = K.reshape(box_scores, [-1])
+    return boxes, box_scores, box_classes
 
 
 def yolo_eval(yolo_outputs,
@@ -81,32 +81,48 @@ def yolo_eval(yolo_outputs,
     input_shape = K.shape(yolo_outputs[0])[1:3] * 32
     boxes = []
     box_scores = []
+    box_classes = []
     for l in range(num_layers):
-        _boxes, _box_scores = yolo_boxes_and_scores(yolo_outputs[l], anchors[anchor_mask[l]], num_classes, input_shape,
-                                                    image_shape)
+        _boxes, _box_scores, _box_classes = yolo_boxes_and_scores(yolo_outputs[l], anchors[anchor_mask[l]], num_classes, input_shape, image_shape)
         boxes.append(_boxes)
         box_scores.append(_box_scores)
+        box_classes.append(_box_classes)
     boxes = K.concatenate(boxes, axis=0)
     box_scores = K.concatenate(box_scores, axis=0)
+    box_classes = K.concatenate(box_classes, axis=0)
 
-    mask = box_scores >= score_threshold
-    max_boxes_tensor = K.constant(max_boxes, dtype='int32')
-    boxes_ = []
-    scores_ = []
-    classes_ = []
-    for c in range(num_classes):
-        # TODO: use keras backend instead of tf.
-        class_boxes = tf.boolean_mask(boxes, mask[:, c])
-        class_box_scores = tf.boolean_mask(box_scores[:, c], mask[:, c])
-        nms_index = tf.image.non_max_suppression(class_boxes, class_box_scores, max_boxes_tensor, iou_threshold=iou_threshold)
-        class_boxes = K.gather(class_boxes, nms_index)
-        class_box_scores = K.gather(class_box_scores, nms_index)
-        classes = K.ones_like(class_box_scores, 'int32') * c
-        boxes_.append(class_boxes)
-        scores_.append(class_box_scores)
-        classes_.append(classes)
-    boxes_ = K.concatenate(boxes_, axis=0)
-    scores_ = K.concatenate(scores_, axis=0)
-    classes_ = K.concatenate(classes_, axis=0)
+    scores_, boxes_, classes_ = non_max_suppression(box_scores, boxes, box_classes, max_boxes, iou_threshold, score_threshold)
 
     return boxes_, scores_, classes_
+
+
+def non_max_suppression(scores, boxes, classes, max_boxes=10, iou_threshold=0.5, score_threshold=0.3):
+    """
+    Applies Non-max suppression (NMS) to set of boxes
+
+    Arguments:
+    scores -- tensor of shape (None,), output of yolo_filter_boxes()
+    boxes -- tensor of shape (None, 4), output of yolo_filter_boxes() that have been scaled to the image size (see later)
+    classes -- tensor of shape (None,), output of yolo_filter_boxes()
+    max_boxes -- integer, maximum number of predicted boxes you'd like
+    iou_threshold -- real value, "intersection over union" threshold used for NMS filtering
+
+    Returns:
+    scores -- tensor of shape (, None), predicted score for each box
+    boxes -- tensor of shape (4, None), predicted box coordinates
+    classes -- tensor of shape (, None), predicted class for each box
+
+    Note: The "None" dimension of the output tensors has obviously to be less than max_boxes. Note also that this
+    function will transpose the shapes of scores, boxes, classes. This is made for convenience.
+    """
+
+    max_boxes_tensor = K.constant(max_boxes, dtype='int32')
+    # Use tf.image.non_max_suppression() to get the list of indices corresponding to boxes you keep
+    nms_indices = tf.image.non_max_suppression(boxes, scores, max_boxes_tensor, iou_threshold, score_threshold)
+
+    # Use K.gather() to select only nms_indices from scores, boxes and classes
+    scores = K.gather(scores, nms_indices)
+    boxes = K.gather(boxes, nms_indices)
+    classes = K.gather(classes, nms_indices)
+
+    return scores, boxes, classes
