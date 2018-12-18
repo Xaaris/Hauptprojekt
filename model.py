@@ -33,8 +33,8 @@ def scale_boxes_to_original_image_size(box_xy, box_wh, image_shape):
     box_mins = box_xy - (box_wh / 2.)
     box_maxes = box_xy + (box_wh / 2.)
 
-    left = box_mins[..., 0:1]
     top = box_mins[..., 1:2]
+    left = box_mins[..., 0:1]
     bottom = box_maxes[..., 1:2]
     right = box_maxes[..., 0:1]
 
@@ -46,16 +46,19 @@ def scale_boxes_to_original_image_size(box_xy, box_wh, image_shape):
     return boxes
 
 
-def yolo_boxes_and_scores(feats, anchors, num_classes, input_shape, image_shape):
+def process_yolo_layer_output(feats, anchors, num_classes, input_shape, image_shape):
     """Process Conv layer output"""
     box_xy, box_wh, box_confidence, box_class_probs = yolo_head(feats, anchors, num_classes, input_shape)
-    boxes = scale_boxes_to_original_image_size(box_xy, box_wh, image_shape)
-    boxes = K.reshape(boxes, [-1, 4])
+
     box_scores = box_confidence * box_class_probs
     box_classes = K.argmax(box_scores, axis=-1)
     box_classes = K.reshape(box_classes, [-1])
     box_scores = K.max(box_scores, axis=-1)
     box_scores = K.reshape(box_scores, [-1])
+
+    boxes = scale_boxes_to_original_image_size(box_xy, box_wh, image_shape)
+    boxes = K.reshape(boxes, [-1, 4])
+
     return boxes, box_scores, box_classes
 
 
@@ -74,7 +77,7 @@ def yolo_eval(yolo_outputs,
     box_scores = []
     box_classes = []
     for l in range(num_layers):
-        _boxes, _box_scores, _box_classes = yolo_boxes_and_scores(yolo_outputs[l], anchors[anchor_mask[l]], num_classes, input_shape, image_shape)
+        _boxes, _box_scores, _box_classes = process_yolo_layer_output(yolo_outputs[l], anchors[anchor_mask[l]], num_classes, input_shape, image_shape)
         boxes.append(_boxes)
         box_scores.append(_box_scores)
         box_classes.append(_box_classes)
