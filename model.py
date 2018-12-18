@@ -4,7 +4,7 @@ import tensorflow as tf
 from keras import backend as K
 
 
-def yolo_head(feats, anchors, num_classes, input_shape, calc_loss=False):
+def yolo_head(feats, anchors, num_classes, input_shape):
     """Convert final layer features to bounding box parameters."""
     num_anchors = len(anchors)
     # Reshape to batch, height, width, num_anchors, box_params.
@@ -24,41 +24,32 @@ def yolo_head(feats, anchors, num_classes, input_shape, calc_loss=False):
     box_confidence = K.sigmoid(feats[..., 4:5])
     box_class_probs = K.sigmoid(feats[..., 5:])
 
-    if calc_loss == True:
-        return grid, feats, box_xy, box_wh
     return box_xy, box_wh, box_confidence, box_class_probs
 
 
-def yolo_correct_boxes(box_xy, box_wh, input_shape, image_shape):
+def scale_boxes_to_original_image_size(box_xy, box_wh, image_shape):
     """Get corrected boxes"""
-    box_yx = box_xy[..., ::-1]
-    box_hw = box_wh[..., ::-1]
-    input_shape = K.cast(input_shape, K.dtype(box_yx))
-    image_shape = K.cast(image_shape, K.dtype(box_yx))
-    new_shape = K.round(image_shape * K.min(input_shape / image_shape))
-    offset = (input_shape - new_shape) / 2. / input_shape
-    scale = input_shape / new_shape
-    box_yx = (box_yx - offset) * scale
-    box_hw *= scale
 
-    box_mins = box_yx - (box_hw / 2.)
-    box_maxes = box_yx + (box_hw / 2.)
-    boxes = K.concatenate([
-        box_mins[..., 0:1],  # y_min
-        box_mins[..., 1:2],  # x_min
-        box_maxes[..., 0:1],  # y_max
-        box_maxes[..., 1:2]  # x_max
-    ])
+    box_mins = box_xy - (box_wh / 2.)
+    box_maxes = box_xy + (box_wh / 2.)
+
+    left = box_mins[..., 0:1]
+    top = box_mins[..., 1:2]
+    bottom = box_maxes[..., 1:2]
+    right = box_maxes[..., 0:1]
+
+    boxes = K.concatenate([top, left, bottom, right])
 
     # Scale boxes back to original image shape.
-    boxes *= K.concatenate([image_shape, image_shape])
+    scaling_tensor = K.concatenate([image_shape, image_shape])
+    boxes *= scaling_tensor
     return boxes
 
 
 def yolo_boxes_and_scores(feats, anchors, num_classes, input_shape, image_shape):
     """Process Conv layer output"""
     box_xy, box_wh, box_confidence, box_class_probs = yolo_head(feats, anchors, num_classes, input_shape)
-    boxes = yolo_correct_boxes(box_xy, box_wh, input_shape, image_shape)
+    boxes = scale_boxes_to_original_image_size(box_xy, box_wh, image_shape)
     boxes = K.reshape(boxes, [-1, 4])
     box_scores = box_confidence * box_class_probs
     box_classes = K.argmax(box_scores, axis=-1)

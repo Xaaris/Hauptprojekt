@@ -12,13 +12,13 @@ if __name__ == "__main__":
     yolo = YOLO()
     start = time.time()
     for frame_counter, frame in enumerate(get_frames("testFiles/IMG_2993.m4v", 0, 1)):
-        frame = take_center_square(frame)
         frame_copy = np.copy(frame)
         vehicle_boxes = yolo.detect_vehicle(frame)
-        for vehicle_box in vehicle_boxes:
+        for vehicle_counter, vehicle_box in enumerate(vehicle_boxes):
             top, left, bottom, right = vehicle_box
             image_copy = cv2.rectangle(frame_copy, (left, top), (right, bottom), (0, 0, 255), 2)
             car_image = get_image_patch(frame, vehicle_box)
+            save_debug_image(car_image, "frame_" + str(frame_counter) + "_car_" + str(vehicle_counter), "found_vehicles")
             license_plate_detection = LicensePlateDetection(car_image)
             plate_candidates = license_plate_detection.detect_license_plate_candidates()
             cv2.drawContours(frame_copy, plate_candidates, -1, (127, 0, 255), 2, offset=(left, top))

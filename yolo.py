@@ -12,6 +12,7 @@ from keras.utils import multi_gpu_model
 from model import yolo_eval
 from timer import timing
 from utils import resize_image
+from tensorflow.python import debug as tf_debug
 
 
 @timing
@@ -40,6 +41,9 @@ class YOLO(object):
         self.class_names = self._get_class()
         self.anchors = self._get_anchors()
         self.sess = K.get_session()
+        # sess = tf_debug.LocalCLIDebugWrapperSession(self.sess)
+        # K.set_session(sess)
+        # self.sess = K.get_session()
         self.boxes, self.scores, self.classes = self.generate()
 
     def _get_class(self):
@@ -68,6 +72,7 @@ class YOLO(object):
                 num_classes + 5), 'Mismatch between model and given anchor and class sizes'
 
         print('{} model, anchors, and classes loaded.'.format(model_path))
+        print(self.yolo_model.summary())
 
         # Generate output tensor targets for filtered bounding boxes.
         self.input_image_shape = K.placeholder(shape=(2,))
@@ -79,6 +84,7 @@ class YOLO(object):
 
     @timing
     def detect_vehicle(self, image):
+        height, width, _ = image.shape
         resized_image = resize_image(image, self.model_image_size)
         image_data = np.array(resized_image, dtype='float32')
 
@@ -90,7 +96,7 @@ class YOLO(object):
             [self.boxes, self.scores, self.classes],
             feed_dict={
                 self.yolo_model.input: image_data,
-                self.input_image_shape: [image.shape[1], image.shape[0]],
+                self.input_image_shape: [height, width],
                 K.learning_phase(): 0
             })
 

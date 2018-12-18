@@ -1,7 +1,7 @@
 """Miscellaneous utility functions."""
 import os
 
-import cv2
+import cv2.cv2 as cv2
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
 
@@ -39,7 +39,7 @@ def take_center_square(image):
 
 
 def resize_image(image, desired_size):
-    """take the center square of the original image"""
+    """resize image to desired size"""
 
     resized_image = cv2.resize(image, desired_size)
 
