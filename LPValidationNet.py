@@ -14,7 +14,7 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Dense, Dropout, Flatten
 from keras.models import Sequential
 
-batch_size = 16
+batch_size = 32
 num_classes = 2
 epochs = 12
 
@@ -104,9 +104,10 @@ model.add(Dense(128, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(num_classes, activation='sigmoid'))
 
-model.compile(loss=keras.losses.categorical_crossentropy,
+model.compile(loss="binary_crossentropy",
               optimizer=keras.optimizers.Adadelta(),
               metrics=['accuracy'])
+print(model.summary())
 
 model.fit(x_train, y_train,
           batch_size=batch_size,
