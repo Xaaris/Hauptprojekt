@@ -3,8 +3,8 @@ import math
 import cv2.cv2 as cv2
 import numpy as np
 
-from timer import timing
-from utils import show
+from src.utils.timer import timing
+from src.utils.image_utils import show
 
 
 @timing

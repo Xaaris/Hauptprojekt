@@ -3,10 +3,10 @@ import time
 import cv2.cv2 as cv2
 import numpy as np
 
-from LicensePlateDetection import LicensePlateDetection
-from timer import print_timing_results
-from utils import save_debug_image, get_image_patch_from_rect, get_frames, get_image_patch_from_contour
-from yolo import YOLO
+from src.LicensePlateDetection import LicensePlateDetection
+from src.utils.timer import print_timing_results
+from src.utils.image_utils import save_debug_image, get_image_patch_from_rect, get_frames, get_image_patch_from_contour
+from src.car_detection.yolo import YOLO
 
 if __name__ == "__main__":
     yolo = YOLO()

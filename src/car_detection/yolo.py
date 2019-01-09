@@ -9,9 +9,9 @@ from keras import backend as K
 from keras.models import load_model
 from keras.utils import multi_gpu_model
 
-from model import yolo_eval
-from timer import timing
-from utils import resize_image
+from src.car_detection.model import yolo_eval
+from src.utils.timer import timing
+from src.utils.image_utils import resize_image
 from tensorflow.python import debug as tf_debug
 
 
@@ -20,9 +20,9 @@ class YOLO(object):
     _defaults = {
         # "model_path": 'model_data/yolo.h5',
         # "anchors_path": 'model_data/yolo_anchors.txt',
-        "model_path": 'model_data/yolo_tiny.h5',
-        "anchors_path": 'model_data/tiny_yolo_anchors.txt',
-        "classes_path": 'model_data/coco_classes.txt',
+        "model_path": 'src/car_detection/model_data/yolo_tiny.h5',
+        "anchors_path": 'src/car_detection/model_data/tiny_yolo_anchors.txt',
+        "classes_path": 'src/car_detection/model_data/coco_classes.txt',
         "score": 0.3,
         "iou": 0.45,
         "model_image_size": (416, 416),

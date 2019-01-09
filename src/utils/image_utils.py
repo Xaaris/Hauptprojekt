@@ -4,7 +4,7 @@ import os
 import cv2.cv2 as cv2
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
-from timer import timing
+from src.utils.timer import timing
 
 
 def letterbox_image(image, desired_size):
