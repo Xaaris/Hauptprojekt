@@ -67,8 +67,6 @@ def get_train_and_test_data():
     return (np.array(x_train), np.array(y_train)), (np.array(x_test), np.array(y_test))
 
 
-# the data, split between train and test sets
-# (x_train, y_train), (x_test, y_test) = mnist.load_data()
 (x_train, y_train), (x_test, y_test) = get_train_and_test_data()
 
 if K.image_data_format() == 'channels_first':
@@ -76,6 +74,7 @@ if K.image_data_format() == 'channels_first':
     x_test = x_test.reshape(x_test.shape[0], number_of_channels, img_rows, img_cols)
     input_shape = (number_of_channels, img_rows, img_cols)
 else:
+    # actual path
     x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, number_of_channels)
     x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, number_of_channels)
     input_shape = (img_rows, img_cols, number_of_channels)

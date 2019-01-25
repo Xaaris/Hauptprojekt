@@ -9,6 +9,7 @@ from keras import backend as K
 from keras.models import load_model
 from keras.utils import multi_gpu_model
 
+from src.Frame import Vehicle
 from src.car_detection.model import yolo_eval
 from src.utils.timer import timing
 from src.utils.image_utils import resize_image
@@ -103,12 +104,14 @@ class YOLO(object):
         out_class_names = [self.class_names[class_index] for class_index in out_classes]
         print("Found the following objects: " + str(out_class_names))
 
-        vehicle_boxes = []
+        vehicles: [Vehicle] = []
         for i, class_name in enumerate(out_class_names):
             if class_name == "car" or class_name == "bus" or class_name == "truck":
                 box = out_boxes[i].round()
                 top, left, bottom, right = box
                 if bottom - top > 150 and right - left > 150:
-                    vehicle_boxes.append(box)
+                    vehicle = Vehicle()
+                    vehicle.box = box
+                    vehicles.append(vehicle)
 
-        return vehicle_boxes
+        return vehicles

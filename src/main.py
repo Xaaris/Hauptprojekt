@@ -1,34 +1,28 @@
 import time
 
-import cv2.cv2 as cv2
-import numpy as np
-
-from src.LicensePlateDetection import LicensePlateDetection
-from src.utils.timer import print_timing_results
-from src.utils.image_utils import save_debug_image, get_image_patch_from_rect, get_frames, get_image_patch_from_contour
+from src.Frame import Frame
+from src.lp_localization.LicensePlateDetectionCascadeClassifier import LicensePlateDetection
 from src.car_detection.yolo import YOLO
+from src.utils import timer
+from src.utils.image_utils import save_debug_image, get_image_patch_from_rect, get_frames, draw_processed_image
 
 if __name__ == "__main__":
     yolo = YOLO()
+    license_plate_detection = LicensePlateDetection()
     start = time.time()
-    for frame_counter, frame in enumerate(get_frames("testFiles/IMG_2993.m4v", 0, 3)):
-        frame_copy = np.copy(frame)
-        vehicle_boxes = yolo.detect_vehicle(frame)
-        for vehicle_counter, vehicle_box in enumerate(vehicle_boxes):
-            top, left, bottom, right = vehicle_box
-            image_copy = cv2.rectangle(frame_copy, (left, top), (right, bottom), (0, 0, 255), 2)
-            car_image = get_image_patch_from_rect(frame, vehicle_box)
-            save_debug_image(car_image, "frame_" + str(frame_counter) + "_car_" + str(vehicle_counter), "found_vehicles")
-            license_plate_detection = LicensePlateDetection(car_image)
-            plate_candidates = license_plate_detection.detect_license_plate_candidates()
-            for plate_counter, candidate in enumerate(plate_candidates):
-                candidate_image_patch = get_image_patch_from_contour(car_image, candidate)
-                save_debug_image(candidate_image_patch, "frame_" + str(frame_counter) + "_car_" + str(vehicle_counter) + "_plate_" + str(plate_counter), "plate_candidates")
-            cv2.drawContours(frame_copy, plate_candidates, -1, (127, 0, 255), 2, offset=(left, top))
-        save_debug_image(frame_copy, "frame_" + str(frame_counter), "processed_frames")
+    path_to_video = "testFiles/IMG_2993.m4v"
+    frame = Frame()
+    for frame.frame_number, frame.image in enumerate(get_frames(path_to_video, 0, 3)):
+        frame.vehicles = yolo.detect_vehicle(frame.image)
+        for vehicle in frame.vehicles:
+            car_image = get_image_patch_from_rect(frame.image, vehicle.box)
+            vehicle.plates = license_plate_detection.detect_license_plate_candidates(car_image)
+
+        processed_frame = draw_processed_image(frame)
+        save_debug_image(processed_frame, "frame_" + str(frame.frame_number), "processed_frames", resize_to=(1920, 1080))
 
     total_duration = time.time() - start
-    fps = frame_counter / total_duration
+    fps = frame.frame_number / total_duration
     print("\nTotal duration: " + str(total_duration) + "s, FPS: " + str(fps))
 
-print_timing_results()
+    timer.print_timing_results()

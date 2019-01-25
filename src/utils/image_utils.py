@@ -1,4 +1,4 @@
-"""Miscellaneous utility functions."""
+"""Miscellaneous utility functions for working with images"""
 import os
 
 import cv2.cv2 as cv2
@@ -68,7 +68,9 @@ def show(image, label="image"):
 
 
 @timing
-def save_debug_image(image, filename, folder=None):
+def save_debug_image(image, filename, folder=None, resize_to=None):
+    if resize_to is not None:
+        image = cv2.resize(image, resize_to)
     if folder:
         path = "debugImages/" + folder + "/" + filename + ".png"
     else:
@@ -82,3 +84,25 @@ def get_frames(path_to_video, from_sec=0, to_sec=None):
     for frame in video.iter_frames():
         color_corrected_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         yield color_corrected_frame
+
+
+def draw_rectangle(image, box, color=(0, 0, 255), thickness=2, offset=(0, 0)):
+    top, left, bottom, right = [int(x) for x in box]
+    offset_y, offset_x = [int(x) for x in offset]
+
+    left += offset_x
+    right += offset_x
+    top += offset_y
+    bottom += offset_y
+
+    cv2.rectangle(image, (left, top), (right, bottom), color, thickness)
+
+
+def draw_processed_image(frame):
+    image_copy = frame.image
+    for vehicle in frame.vehicles:
+        draw_rectangle(image_copy, vehicle.box)
+        for plate in vehicle.plates:
+            v_top, v_left, _, _ = vehicle.box
+            draw_rectangle(image_copy, plate.box, color=(0, 255, 0), offset=(v_top, v_left))
+    return image_copy
