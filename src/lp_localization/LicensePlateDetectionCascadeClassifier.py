@@ -1,3 +1,5 @@
+import os
+
 import cv2.cv2 as cv2
 
 from src.Frame import Plate
@@ -8,8 +10,7 @@ from src.utils.timer import timing
 class LicensePlateDetection:
 
     def __init__(self):
-        #TODO: make relative
-        path_to_xml_classifier_file = "/Users/hannes/PycharmProjects/Hauptprojekt/src/lp_localization/lp_cascade.xml"
+        path_to_xml_classifier_file = os.path.abspath("src/lp_localization/lp_cascade.xml")
         self.classifier = cv2.CascadeClassifier(path_to_xml_classifier_file)
 
     @timing
