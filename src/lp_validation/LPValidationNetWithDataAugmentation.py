@@ -11,7 +11,7 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator
 
-from src.utils.image_utils import resize_image, show
+from src.utils.image_utils import resize_image
 
 img_rows, img_cols = 50, 150
 batch_size = 32
