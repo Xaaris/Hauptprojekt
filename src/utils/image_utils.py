@@ -104,5 +104,9 @@ def draw_processed_image(frame):
         draw_rectangle(image_copy, vehicle.box)
         for plate in vehicle.plates:
             v_top, v_left, _, _ = vehicle.box
-            draw_rectangle(image_copy, plate.box, color=(0, 255, 0), offset=(v_top, v_left))
+            if plate.valid:
+                color = (0, 255, 0)
+            else:
+                color = (0, 0, 200)
+            draw_rectangle(image_copy, plate.box, color=color, offset=(v_top, v_left))
     return image_copy

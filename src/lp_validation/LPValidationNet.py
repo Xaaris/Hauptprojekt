@@ -9,10 +9,11 @@ import os
 import cv2.cv2 as cv2
 import keras
 import numpy as np
-from keras import backend as K
 from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Dense, Dropout, Flatten
 from keras.models import Sequential
+
+from src.utils.image_utils import resize_image
 
 batch_size = 32
 num_classes = 2
@@ -67,52 +68,68 @@ def get_train_and_test_data():
     return (np.array(x_train), np.array(y_train)), (np.array(x_test), np.array(y_test))
 
 
-(x_train, y_train), (x_test, y_test) = get_train_and_test_data()
+def create_model():
+    model = Sequential()
+    model.add(Conv2D(32, kernel_size=(3, 3),
+                     activation='relu',
+                     input_shape=(img_rows, img_cols, number_of_channels)))
+    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+    model.add(Flatten())
+    model.add(Dense(128, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(num_classes, activation='sigmoid'))
 
-if K.image_data_format() == 'channels_first':
-    x_train = x_train.reshape(x_train.shape[0], number_of_channels, img_rows, img_cols)
-    x_test = x_test.reshape(x_test.shape[0], number_of_channels, img_rows, img_cols)
-    input_shape = (number_of_channels, img_rows, img_cols)
-else:
-    # actual path
+    model.compile(loss="binary_crossentropy",
+                  optimizer=keras.optimizers.Adadelta(),
+                  metrics=['accuracy'])
+    print(model.summary())
+
+    return model
+
+
+def train_model(model):
+    (x_train, y_train), (x_test, y_test) = get_train_and_test_data()
+
     x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, number_of_channels)
     x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, number_of_channels)
-    input_shape = (img_rows, img_cols, number_of_channels)
 
-x_train = x_train.astype('float32')
-x_test = x_test.astype('float32')
-x_train /= 255
-x_test /= 255
-print('x_train shape:', x_train.shape)
-print(x_train.shape[0], 'train samples')
-print(x_test.shape[0], 'test samples')
+    x_train = x_train.astype('float32')
+    x_test = x_test.astype('float32')
+    x_train /= 255
+    x_test /= 255
+    print('x_train shape:', x_train.shape)
+    print(x_train.shape[0], 'train samples')
+    print(x_test.shape[0], 'test samples')
 
-# convert class vectors to binary class matrices
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
+    # convert class vectors to binary class matrices
+    y_train = keras.utils.to_categorical(y_train, num_classes)
+    y_test = keras.utils.to_categorical(y_test, num_classes)
 
-model = Sequential()
-model.add(Conv2D(32, kernel_size=(3, 3),
-                 activation='relu',
-                 input_shape=input_shape))
-model.add(Conv2D(64, (3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
-model.add(Flatten())
-model.add(Dense(128, activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(num_classes, activation='sigmoid'))
+    model.fit(x_train, y_train,
+              batch_size=batch_size,
+              epochs=epochs,
+              verbose=1,
+              validation_data=(x_test, y_test))
+    score = model.evaluate(x_test, y_test, verbose=0)
+    print('Test loss:', score[0])
+    print('Test accuracy:', score[1])
+    model.save_weights("model_data/lp_validation.h5")
 
-model.compile(loss="binary_crossentropy",
-              optimizer=keras.optimizers.Adadelta(),
-              metrics=['accuracy'])
-print(model.summary())
 
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=epochs,
-          verbose=1,
-          validation_data=(x_test, y_test))
-score = model.evaluate(x_test, y_test, verbose=0)
-print('Test loss:', score[0])
-print('Test accuracy:', score[1])
+def load_weights(model):
+    model.load_weights(os.path.abspath("src/lp_validation/model_data/lp_validation.h5"))
+
+
+def predict(model, license_plate_candidate):
+    resized_patch = resize_image(license_plate_candidate, (img_cols, img_rows))
+    expanded_dims_for_batch = np.expand_dims(resized_patch, axis=0)
+    prediction = model.predict(expanded_dims_for_batch)
+    if prediction[0][0] < 0.5 and prediction[0][1] > 0.5:
+        return True
+    else:
+        return False
+
+# model = create_model()
+# train_model(model)
