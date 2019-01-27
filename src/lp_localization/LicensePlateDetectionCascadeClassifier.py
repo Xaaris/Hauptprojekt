@@ -37,6 +37,7 @@ class LicensePlateDetection:
             plates.append(plate)
         return plates
 
+    @timing
     def validate_plates(self, image, plate_candidates):
         for plate in plate_candidates:
             image_patch = get_image_patch_from_rect(image, plate.box)
