@@ -122,9 +122,7 @@ def predict(model, license_plate_candidate):
     resized_patch = resize_image(license_plate_candidate, (img_cols, img_rows))
     expanded_dims_for_batch = np.expand_dims(resized_patch, axis=0)
     prediction = model.predict(expanded_dims_for_batch)
-    prediction_ = prediction[0][0]
-    print(prediction_)
-    return True if prediction_ >= 0.9 else False
+    return True if prediction[0][0] >= 0.9 else False
 
 # model = create_model()
 # train_model(model)
