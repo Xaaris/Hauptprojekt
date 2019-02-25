@@ -79,7 +79,7 @@ def create_model():
     model.add(Flatten())
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.5))
-    model.add(Dense(num_classes, activation='sigmoid'))
+    model.add(Dense(num_classes - 1, activation='sigmoid'))
 
     model.compile(loss="binary_crossentropy",
                   optimizer=keras.optimizers.Adadelta(),
@@ -103,10 +103,6 @@ def train_model(model):
     print(x_train.shape[0], 'train samples')
     print(x_test.shape[0], 'test samples')
 
-    # convert class vectors to binary class matrices
-    y_train = keras.utils.to_categorical(y_train, num_classes)
-    y_test = keras.utils.to_categorical(y_test, num_classes)
-
     model.fit(x_train, y_train,
               batch_size=batch_size,
               epochs=epochs,
@@ -126,10 +122,9 @@ def predict(model, license_plate_candidate):
     resized_patch = resize_image(license_plate_candidate, (img_cols, img_rows))
     expanded_dims_for_batch = np.expand_dims(resized_patch, axis=0)
     prediction = model.predict(expanded_dims_for_batch)
-    if prediction[0][0] < 0.5 and prediction[0][1] > 0.5:
-        return True
-    else:
-        return False
+    prediction_ = prediction[0][0]
+    print(prediction_)
+    return True if prediction_ >= 0.9 else False
 
 # model = create_model()
 # train_model(model)
