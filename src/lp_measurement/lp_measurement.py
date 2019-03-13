@@ -2,6 +2,7 @@ import math
 
 import cv2.cv2 as cv2
 import numpy as np
+import numpy.polynomial.polynomial as poly
 
 from src.utils.image_utils import show
 
@@ -124,20 +125,45 @@ def find_lp_contour(image):
 
 
 def perfect_line(image, line):
+    ten_percent_of_image_height = image.shape[0] * 0.1
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     pt1, pt2 = line
     dx, dy = pt1[0] - pt2[0], pt1[1] - pt2[1]
     angle_rad = math.atan2(dy, dx)
     points_on_line = getEquidistantPoints(pt1, pt2, 10)
     for point in points_on_line:
-        first_point = get_point_at(point, 10, angle_rad + np.pi / 2)
-        second_point = get_point_at(point, -10, angle_rad + np.pi / 2)
+        first_point = get_point_at(point, ten_percent_of_image_height, angle_rad + np.pi / 2)
+        second_point = get_point_at(point, - ten_percent_of_image_height, angle_rad + np.pi / 2)
         cv2.line(image, first_point, second_point, (0, 0, 255), 1)
+        number_of_measuring_points = 10
+        measuring_points = getEquidistantPoints(first_point, second_point, number_of_measuring_points)
+        gray_values = []
+        for measuring_point in measuring_points:
+            gray_values.append(float(gray_image[measuring_point[1]][measuring_point[0]]))
+
+        line_point_in_array = find_actual_line_point(gray_values, ten_percent_of_image_height * 2)
+        if line_point_in_array is not None:
+            line_point = get_point_at(first_point, line_point_in_array, -(angle_rad + np.pi / 2))
+            cv2.line(image, line_point, get_point_at(line_point, 30, angle_rad), (0, 255, 0), 1)
+
     show(image)
 
 
+def find_actual_line_point(gray_values, length_of_measuring_line):
+    coeffs = poly.polyfit(np.linspace(0, length_of_measuring_line, len(gray_values)), gray_values, 3)
+    polynom = np.poly1d(coeffs[::-1])
+    first_derivative = polynom.deriv()
+    crit = first_derivative.deriv().r
+    r_crit = crit[crit.imag == 0].real
+    test = first_derivative.deriv(2)(r_crit)
+    x_min = r_crit[test > 0]
+    if 0 <= x_min <= length_of_measuring_line:
+        return x_min
+
+
 def getEquidistantPoints(pt1, pt2, num_of_points):
-    return zip(np.linspace(pt1[0], pt2[0], num_of_points + 1, dtype=int),
-               np.linspace(pt1[1], pt2[1], num_of_points + 1, dtype=int))
+    return zip(np.linspace(pt1[0], pt2[0], num_of_points, dtype=int),
+               np.linspace(pt1[1], pt2[1], num_of_points, dtype=int))
 
 
 def get_point_at(origin, dist, theta):
@@ -151,7 +177,7 @@ def get_line_length(line):
     return length
 
 
-test_image_path = "3590476308847402370.png"
+test_image_path = "3227759838959127893.png"
 image = load_image(test_image_path)
 balanced_image = correct_white_balance(image)
 show(balanced_image, "balanced")
@@ -164,4 +190,3 @@ show(image_with_lines, "image_with_lines")
 
 for line in lines:
     perfect_line(image, line)
-
