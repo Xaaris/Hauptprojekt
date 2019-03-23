@@ -1,6 +1,6 @@
 import math
 
-import cv2.cv2 as cv2
+import cv2
 import numpy as np
 import numpy.polynomial.polynomial as poly
 
@@ -35,41 +35,6 @@ def draw_lines(image, lines):
 def correct_white_balance(image):
     wb = cv2.xphoto.createSimpleWB()
     return wb.balanceWhite(image)
-
-
-def detect_vertical_lines(gray_image):
-    v_edges = cv2.Sobel(gray_image, -1, 1, 0)
-    v_edges = cv2.Canny(v_edges, 50, 150, apertureSize=3)
-    show(v_edges, "v_edges")
-
-    minLineLength = gray_image.shape[0] / 4
-    maxLineGap = minLineLength / 2
-    lines = cv2.HoughLinesP(v_edges, 1, np.pi / 180, threshold=10, minLineLength=minLineLength, maxLineGap=maxLineGap)
-
-    if lines is not None:
-        vertical_lines = []
-        for line in lines:
-            if line_is_vertical(line[0]):
-                vertical_lines.append(line[0])
-        return vertical_lines
-
-
-def detect_horizontal_lines(gray_image):
-    h_edges = cv2.Sobel(gray_image, -1, 0, 1)
-    h_edges = cv2.Canny(h_edges, 50, 150, apertureSize=3)
-    show(h_edges, "h_edges")
-
-    min_line_length = gray_image.shape[1] / 2
-    max_line_gap = min_line_length / 2
-    lines = cv2.HoughLinesP(h_edges, 1, np.pi / 180, threshold=80, minLineLength=min_line_length,
-                            maxLineGap=max_line_gap)
-
-    if lines is not None:
-        horizontal_lines = []
-        for line in lines:
-            if line_is_horizontal(line[0]):
-                horizontal_lines.append(line[0])
-        return horizontal_lines
 
 
 def get_lines_from_contour(contour):
