@@ -59,9 +59,10 @@ def detect_horizontal_lines(gray_image):
     h_edges = cv2.Canny(h_edges, 50, 150, apertureSize=3)
     show(h_edges, "h_edges")
 
-    minLineLength = gray_image.shape[1] / 2
-    maxLineGap = minLineLength / 2
-    lines = cv2.HoughLinesP(h_edges, 1, np.pi / 180, threshold=80, minLineLength=minLineLength, maxLineGap=maxLineGap)
+    min_line_length = gray_image.shape[1] / 2
+    max_line_gap = min_line_length / 2
+    lines = cv2.HoughLinesP(h_edges, 1, np.pi / 180, threshold=80, minLineLength=min_line_length,
+                            maxLineGap=max_line_gap)
 
     if lines is not None:
         horizontal_lines = []
@@ -95,16 +96,16 @@ def find_lp_contour(image):
     hue, saturation, value = cv2.split(hsv_image)
     # show(hue, "hue")
     # show(saturation, "saturation")
-    show(value, "value")
+    # show(value, "value")
     # threshold to find the contour
     _, thresholded = cv2.threshold(value, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     show(thresholded, "thresholded")
     # morphological operations
     kernel = (7, 7)
     thresholded_close = cv2.morphologyEx(thresholded, cv2.MORPH_CLOSE, kernel)
-    show(thresholded_close, "thresholded_close")
+    # show(thresholded_close, "thresholded_close")
     thresholded_open = cv2.morphologyEx(thresholded_close, cv2.MORPH_OPEN, kernel)
-    show(thresholded_open, "thresholded_open")
+    # show(thresholded_open, "thresholded_open")
     # The cv2.findContours method is destructive (meaning it manipulates the image you pass in)
     # so if you plan on using that image again later, be sure to clone it.
     contours = cv2.findContours(thresholded_open.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)[-2]
@@ -114,13 +115,13 @@ def find_lp_contour(image):
     # loop over our 10 largest contours in the query image
     image_copy = np.copy(image)
     cv2.drawContours(image_copy, [biggest_contour], -1, (0, 255, 0), 1)
-    show(image_copy, "all contours")
+    # show(image_copy, "all contours")
 
     perimeter = cv2.arcLength(biggest_contour, True)
     approx_poly = cv2.approxPolyDP(biggest_contour, 0.01 * perimeter, True)
     image_copy2 = np.copy(image)
     cv2.drawContours(image_copy2, [approx_poly], -1, (0, 255, 0), 1)
-    show(image_copy2, "approx")
+    # show(image_copy2, "approx")
     return approx_poly
 
 
@@ -130,23 +131,37 @@ def perfect_line(image, line):
     pt1, pt2 = line
     dx, dy = pt1[0] - pt2[0], pt1[1] - pt2[1]
     angle_rad = math.atan2(dy, dx)
-    points_on_line = getEquidistantPoints(pt1, pt2, 10)
+    points_on_line = get_equidistant_points(pt1, pt2, 10)
+    actual_line_points = []
     for point in points_on_line:
         first_point = get_point_at(point, ten_percent_of_image_height, angle_rad + np.pi / 2)
         second_point = get_point_at(point, - ten_percent_of_image_height, angle_rad + np.pi / 2)
         cv2.line(image, first_point, second_point, (0, 0, 255), 1)
         number_of_measuring_points = 10
-        measuring_points = getEquidistantPoints(first_point, second_point, number_of_measuring_points)
+        measuring_points = get_equidistant_points(first_point, second_point, number_of_measuring_points)
         gray_values = []
         for measuring_point in measuring_points:
             gray_values.append(float(gray_image[measuring_point[1]][measuring_point[0]]))
 
         line_point_in_array = find_actual_line_point(gray_values, ten_percent_of_image_height * 2)
         if line_point_in_array is not None:
-            line_point = get_point_at(first_point, line_point_in_array, -(angle_rad + np.pi / 2))
-            cv2.line(image, line_point, get_point_at(line_point, 30, angle_rad), (0, 255, 0), 1)
+            actual_line_point = get_point_at(first_point, line_point_in_array, angle_rad - np.pi / 2)
+            actual_line_points.append(actual_line_point)
+            cv2.line(image, actual_line_point, get_point_at(actual_line_point, ten_percent_of_image_height, angle_rad), (0, 255, 0), 1)
 
+    line_start, line_end = best_fit_line_from_points(actual_line_points)
+    cv2.line(image, line_start, line_end, (255, 0, 0), 1)
     show(image)
+
+
+def best_fit_line_from_points(points):
+    xs = [p[0] for p in points]
+    ys = [p[1] for p in points]
+    line_coeffs = poly.polyfit(xs, ys, 1)
+    line_polynom = np.poly1d(line_coeffs[::-1])
+    line_start = (xs[0], int(line_polynom(xs[0])))
+    line_end = (xs[-1], int(line_polynom(xs[-1])))
+    return line_start, line_end
 
 
 def find_actual_line_point(gray_values, length_of_measuring_line):
@@ -161,7 +176,7 @@ def find_actual_line_point(gray_values, length_of_measuring_line):
         return x_min
 
 
-def getEquidistantPoints(pt1, pt2, num_of_points):
+def get_equidistant_points(pt1, pt2, num_of_points):
     return zip(np.linspace(pt1[0], pt2[0], num_of_points, dtype=int),
                np.linspace(pt1[1], pt2[1], num_of_points, dtype=int))
 
