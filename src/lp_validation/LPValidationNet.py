@@ -115,7 +115,7 @@ def train_model(model):
 
 
 def load_weights(model):
-    model.load_weights(os.path.abspath("src/lp_validation/model_data/lp_validation.h5"))
+    model.load_weights(os.path.abspath("lp_validation/model_data/lp_validation.h5"))
 
 
 def predict(model, license_plate_candidate):

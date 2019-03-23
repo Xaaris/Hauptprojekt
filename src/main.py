@@ -10,7 +10,7 @@ if __name__ == "__main__":
     yolo = YOLO()
     license_plate_detection = LicensePlateDetection()
     start = time.time()
-    path_to_video = "testFiles/IMG_2993.m4v"
+    path_to_video = "../testFiles/IMG_2993.m4v"
     frame = Frame()
     for frame.frame_number, frame.image in enumerate(get_frames(path_to_video, 0, 3)):
         frame.vehicles = yolo.detect_vehicle(frame.image)

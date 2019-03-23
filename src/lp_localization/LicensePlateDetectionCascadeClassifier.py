@@ -11,7 +11,7 @@ from src.utils.timer import timing
 class LicensePlateDetection:
 
     def __init__(self):
-        path_to_xml_classifier_file = os.path.abspath("src/lp_localization/lp_cascade.xml")
+        path_to_xml_classifier_file = os.path.abspath("lp_localization/lp_cascade.xml")
         self.classifier = cv2.CascadeClassifier(path_to_xml_classifier_file)
         self.lp_validation_model = create_model()
         load_weights(self.lp_validation_model)
