@@ -77,8 +77,9 @@ def perfect_line(image, line):
         if line_point_in_array is not None:
             actual_line_point = get_point_at(first_point, line_point_in_array, angle_rad - np.pi / 2)
             actual_line_points.append(actual_line_point)
-            # cv2.line(image, actual_line_point, get_point_at(actual_line_point, ten_percent_of_image_height, angle_rad), (0, 255, 0), 1)
+            cv2.line(image, actual_line_point, get_point_at(actual_line_point, ten_percent_of_image_height, angle_rad), (0, 255, 0), 1)
 
+    show(image, "measuring")
     line_start, line_end = best_fit_line_from_points(actual_line_points)
     return line_start, line_end
 
@@ -97,12 +98,10 @@ def find_actual_line_point(gray_values, length_of_measuring_line):
     coeffs = poly.polyfit(np.linspace(0, length_of_measuring_line, len(gray_values)), gray_values, 3)
     polynom = np.poly1d(coeffs[::-1])
     first_derivative = polynom.deriv()
-    crit = first_derivative.deriv().r
-    r_crit = crit[crit.imag == 0].real
-    test = first_derivative.deriv(2)(r_crit)
-    x_min = r_crit[test > 0]
-    if 0 <= x_min <= length_of_measuring_line:
-        return x_min
+    second_derivative = first_derivative.deriv()
+    roots = second_derivative.roots
+    if 0 <= roots[0] <= length_of_measuring_line:
+        return roots[0]
 
 
 def get_equidistant_points(pt1, pt2, num_of_points):
