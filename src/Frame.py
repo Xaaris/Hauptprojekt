@@ -4,6 +4,7 @@ from numpy.core.multiarray import ndarray
 class Plate:
     box: [int, int, int, int]
     valid: bool
+    height: float
 
 
 class Vehicle:

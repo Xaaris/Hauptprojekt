@@ -39,7 +39,6 @@ def find_lp_contour(image):
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     hue, saturation, value = cv2.split(hsv_image)
     _, thresholded = cv2.threshold(value, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    show(thresholded, "thresholded")
     kernel = (7, 7)
     thresholded_close = cv2.morphologyEx(thresholded, cv2.MORPH_CLOSE, kernel)
     thresholded_open = cv2.morphologyEx(thresholded_close, cv2.MORPH_OPEN, kernel)
@@ -79,7 +78,7 @@ def perfect_line(image, line):
             actual_line_points.append(actual_line_point)
             cv2.line(image, actual_line_point, get_point_at(actual_line_point, ten_percent_of_image_height, angle_rad), (0, 255, 0), 1)
 
-    show(image, "measuring")
+    # show(image, "measuring")
     line_start, line_end = best_fit_line_from_points(actual_line_points)
     return line_start, line_end
 
@@ -150,18 +149,27 @@ def get_average_distance_of_lines(line1, line2):
     return average_distance_between_lines / 2
 
 
-test_image_path = "2505119030049077848.png"
-image = load_image(test_image_path)
-balanced_image = correct_white_balance(image)
-show(balanced_image, "balanced")
+def get_height_of_license_plate(lp_image):
+    balanced_image = correct_white_balance(lp_image)
+    lp_contour = find_lp_contour(balanced_image)
+    lines = get_2_longest_lines_from_contour(lp_contour)
+    final_lines = [perfect_line(balanced_image, line) for line in lines]
+    return get_average_distance_of_lines(final_lines[0], final_lines[1])
 
-lp_contour = find_lp_contour(balanced_image)
 
-lines = get_2_longest_lines_from_contour(lp_contour)
-image_with_lines = draw_lines(balanced_image, lines, (0, 0, 255))
-show(image_with_lines, "image_with_lines")
-
-final_lines = [perfect_line(image, line) for line in lines]
-image_with_lines = draw_lines(image_with_lines, final_lines, (0, 255, 0))
-show(image_with_lines, "image_with_lines")
-print(get_average_distance_of_lines(final_lines[0], final_lines[1]))
+# test_image_path = "2737628760821104992.png"
+# image = load_image(test_image_path)
+# print(get_height_of_license_plate(image))
+# balanced_image = correct_white_balance(image)
+# show(balanced_image, "balanced")
+#
+# lp_contour = find_lp_contour(balanced_image)
+#
+# lines = get_2_longest_lines_from_contour(lp_contour)
+# image_with_lines = draw_lines(balanced_image, lines, (0, 0, 255))
+# show(image_with_lines, "image_with_lines")
+#
+# final_lines = [perfect_line(image, line) for line in lines]
+# image_with_lines = draw_lines(image_with_lines, final_lines, (0, 255, 0))
+# show(image_with_lines, "image_with_lines")
+# print(get_average_distance_of_lines(final_lines[0], final_lines[1]))

@@ -4,6 +4,7 @@ import cv2.cv2 as cv2
 
 from src.Frame import Plate
 from src.lp_validation.LPValidationNet import create_model, load_weights, predict
+from src.lp_measurement.lp_measurement import get_height_of_license_plate
 from src.utils.image_utils import show, get_image_patch_from_rect
 from src.utils.timer import timing
 
@@ -20,6 +21,9 @@ class LicensePlateDetection:
     def detect_license_plate_candidates(self, image, debug_mode=False):
         plate_candidates = self.process_image(image, debug_mode)
         self.validate_plates(image, plate_candidates)
+        for plate in plate_candidates:
+            if plate.valid:
+                self.measure_plate_height(image, plate)
         return plate_candidates
 
     def process_image(self, image, debug_mode):
@@ -42,3 +46,8 @@ class LicensePlateDetection:
         for plate in plate_candidates:
             image_patch = get_image_patch_from_rect(image, plate.box)
             plate.valid = predict(self.lp_validation_model, image_patch)
+
+
+    def measure_plate_height(self, image, plate):
+        image_patch = get_image_patch_from_rect(image, plate.box)
+        plate.height = get_height_of_license_plate(image_patch)
