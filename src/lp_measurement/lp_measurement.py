@@ -70,7 +70,9 @@ def perfect_line(image, line):
         measuring_points = get_equidistant_points(first_point, second_point, number_of_measuring_points)
         gray_values = []
         for measuring_point in measuring_points:
-            gray_values.append(float(gray_image[measuring_point[1]][measuring_point[0]]))
+            y = min(measuring_point[1], gray_image.shape[0] - 1)
+            x = min(measuring_point[0], gray_image.shape[1] - 1)
+            gray_values.append(float(gray_image[y][x]))
 
         line_point_in_array = find_actual_line_point(gray_values, ten_percent_of_image_height * 2)
         if line_point_in_array is not None:

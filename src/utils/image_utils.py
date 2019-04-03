@@ -72,9 +72,9 @@ def save_debug_image(image, filename, folder=None, resize_to=None):
     if resize_to is not None:
         image = cv2.resize(image, resize_to)
     if folder:
-        path = "debugImages/" + folder + "/" + filename + ".png"
+        path = "../debugImages/" + folder + "/" + filename + ".png"
     else:
-        path = "debugImages/" + filename + ".png"
+        path = "../debugImages/" + filename + ".png"
     cv2.imwrite(path, image)
 
 
