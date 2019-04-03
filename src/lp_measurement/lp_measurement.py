@@ -142,11 +142,10 @@ def get_average_distance_of_lines(line1, line2):
         lot_fuss = get_nearest_point_on_line(line1, pt)
         if lot_fuss is not None:
             inner_edge_lines.append([lot_fuss, pt])
-    assert len(inner_edge_lines) == 2
     average_distance_between_lines = 0
     for line in inner_edge_lines:
         average_distance_between_lines += get_line_length(line)
-    return average_distance_between_lines / 2
+    return average_distance_between_lines / len(inner_edge_lines)
 
 
 def get_height_of_license_plate(lp_image):

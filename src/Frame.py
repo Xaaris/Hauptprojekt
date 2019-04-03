@@ -17,3 +17,12 @@ class Frame:
     frame_number: int
     image: ndarray
     vehicles: [Vehicle]
+
+    def __str__(self):
+        retString = "Frame: " + str(self.frame_number)
+        for index, vehicle in enumerate(self.vehicles):
+            retString += "  Vehicle: " + str(index)
+            for plate in vehicle.plates:
+                if (plate.valid):
+                    retString += " plate height: " + str(plate.height)
+        return retString

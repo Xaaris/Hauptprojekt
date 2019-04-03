@@ -102,7 +102,7 @@ class YOLO(object):
             })
 
         out_class_names = [self.class_names[class_index] for class_index in out_classes]
-        print("Found the following objects: " + str(out_class_names))
+        # print("Found the following objects: " + str(out_class_names))
 
         vehicles: [Vehicle] = []
         for i, class_name in enumerate(out_class_names):
