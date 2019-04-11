@@ -23,6 +23,6 @@ class Frame:
         for index, vehicle in enumerate(self.vehicles):
             retString += "  Vehicle: " + str(index)
             for plate in vehicle.plates:
-                if (plate.valid):
-                    retString += " plate height: " + str(plate.height)
+                if (plate.valid and hasattr(plate, "height")):
+                    retString += " plate height: " + "{:.4f}".format(plate.height)
         return retString

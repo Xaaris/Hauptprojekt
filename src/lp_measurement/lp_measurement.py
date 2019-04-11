@@ -135,19 +135,20 @@ def get_nearest_point_on_line(line, point):
 
 
 def get_average_distance_of_lines(line1, line2):
-    inner_edge_lines = []
-    for pt in line1:
-        lot_fuss = get_nearest_point_on_line(line2, pt)
-        if lot_fuss is not None:
-            inner_edge_lines.append([lot_fuss, pt])
-    for pt in line2:
-        lot_fuss = get_nearest_point_on_line(line1, pt)
-        if lot_fuss is not None:
-            inner_edge_lines.append([lot_fuss, pt])
-    average_distance_between_lines = 0
-    for line in inner_edge_lines:
-        average_distance_between_lines += get_line_length(line)
-    return average_distance_between_lines / len(inner_edge_lines)
+    if (get_line_length(line1) > 0 and get_line_length(line2) > 0):
+        inner_edge_lines = []
+        for pt in line1:
+            lot_fuss = get_nearest_point_on_line(line2, pt)
+            if lot_fuss is not None:
+                inner_edge_lines.append([lot_fuss, pt])
+        for pt in line2:
+            lot_fuss = get_nearest_point_on_line(line1, pt)
+            if lot_fuss is not None:
+                inner_edge_lines.append([lot_fuss, pt])
+        average_distance_between_lines = 0
+        for line in inner_edge_lines:
+            average_distance_between_lines += get_line_length(line)
+        return average_distance_between_lines / len(inner_edge_lines)
 
 
 def get_height_of_license_plate(lp_image):

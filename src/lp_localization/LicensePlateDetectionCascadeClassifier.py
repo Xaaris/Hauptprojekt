@@ -50,4 +50,6 @@ class LicensePlateDetection:
 
     def measure_plate_height(self, image, plate):
         image_patch = get_image_patch_from_rect(image, plate.box)
-        plate.height = get_height_of_license_plate(image_patch)
+        plate_height = get_height_of_license_plate(image_patch)
+        if (plate_height is not None):
+            plate.height = plate_height
