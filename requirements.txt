@@ -4,11 +4,11 @@ decorator==4.3.0
 gast==0.2.0
 grpcio==1.16.1
 h5py==2.8.0
-imageio==2.4.1
+imageio==2.5.0
 Keras==2.2.4
 Keras-Applications==1.0.6
 Keras-Preprocessing==1.0.5
-moviepy==0.2.3.5
+moviepy==1.0.0.0
 numpy==1.16.2
 opencv-contrib-python==4.0.0.21
 protobuf==3.6.1
