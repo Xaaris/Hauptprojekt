@@ -16,7 +16,11 @@ class Frame:
     """Class for keeping track of data found within a frame"""
     frame_number: int
     image: ndarray
-    vehicles: [Vehicle]
+    vehicles: [Vehicle] = []
+
+    def __init__(self, frame_number, image):
+        self.frame_number = frame_number
+        self.image = image
 
     def __str__(self):
         retString = "Frame: " + str(self.frame_number)
@@ -26,3 +30,10 @@ class Frame:
                 if (plate.valid and hasattr(plate, "height")):
                     retString += " plate height: " + "{:.4f}".format(plate.height)
         return retString
+
+
+class Video:
+    frames: [Frame] = []
+
+    def __init__(self, path_to_file):
+        self.path_to_file = path_to_file

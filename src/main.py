@@ -1,6 +1,6 @@
 import time
 
-from src.Frame import Frame
+from src.Video import Frame, Video
 from src.lp_localization.LicensePlateDetectionCascadeClassifier import LicensePlateDetection
 from src.car_detection.yolo import YOLO
 from src.utils import timer
@@ -10,9 +10,11 @@ if __name__ == "__main__":
     yolo = YOLO()
     license_plate_detection = LicensePlateDetection()
     start = time.time()
-    path_to_video = "../testFiles/IMG_2993.m4v"
-    frame = Frame()
-    for frame.frame_number, frame.image in enumerate(get_frames(path_to_video, 0, 3)):
+    video = Video("../testFiles/IMG_2993.m4v")
+    path_to_video = video.path_to_file
+    for frame_number, image in enumerate(get_frames(path_to_video, 0, 3)):
+        frame = Frame(frame_number, image)
+        video.frames.append(frame)
         frame.vehicles = yolo.detect_vehicle(frame.image)
         for vehicle in frame.vehicles:
             car_image = get_image_patch_from_rect(frame.image, vehicle.box)

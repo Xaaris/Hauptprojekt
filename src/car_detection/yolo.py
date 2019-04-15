@@ -9,7 +9,7 @@ from keras import backend as K
 from keras.models import load_model
 from keras.utils import multi_gpu_model
 
-from src.Frame import Vehicle
+from src.Video import Vehicle
 from src.car_detection.model import yolo_eval
 from src.utils.timer import timing
 from src.utils.image_utils import resize_image

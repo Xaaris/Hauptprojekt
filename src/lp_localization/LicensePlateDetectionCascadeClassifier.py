@@ -2,7 +2,7 @@ import os
 
 import cv2.cv2 as cv2
 
-from src.Frame import Plate
+from src.Video import Plate
 from src.lp_validation.LPValidationNet import create_model, load_weights, predict
 from src.lp_measurement.lp_measurement import get_height_of_license_plate
 from src.utils.image_utils import show, get_image_patch_from_rect
