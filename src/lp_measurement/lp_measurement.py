@@ -135,7 +135,7 @@ def get_nearest_point_on_line(line, point):
 
 
 def get_average_distance_of_lines(line1, line2):
-    if (get_line_length(line1) > 0 and get_line_length(line2) > 0):
+    if get_line_length(line1) > 0 and get_line_length(line2) > 0:
         inner_edge_lines = []
         for pt in line1:
             lot_fuss = get_nearest_point_on_line(line2, pt)
@@ -157,21 +157,3 @@ def get_height_of_license_plate(lp_image):
     lines = get_2_longest_lines_from_contour(lp_contour)
     final_lines = [perfect_line(balanced_image, line) for line in lines]
     return get_average_distance_of_lines(final_lines[0], final_lines[1])
-
-
-# test_image_path = "2737628760821104992.png"
-# image = load_image(test_image_path)
-# print(get_height_of_license_plate(image))
-# balanced_image = correct_white_balance(image)
-# show(balanced_image, "balanced")
-#
-# lp_contour = find_lp_contour(balanced_image)
-#
-# lines = get_2_longest_lines_from_contour(lp_contour)
-# image_with_lines = draw_lines(balanced_image, lines, (0, 0, 255))
-# show(image_with_lines, "image_with_lines")
-#
-# final_lines = [perfect_line(image, line) for line in lines]
-# image_with_lines = draw_lines(image_with_lines, final_lines, (0, 255, 0))
-# show(image_with_lines, "image_with_lines")
-# print(get_average_distance_of_lines(final_lines[0], final_lines[1]))
