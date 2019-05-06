@@ -5,7 +5,7 @@ import cv2.cv2 as cv2
 from src.Video import Plate
 from src.lp_validation.LPValidationNet import create_model, load_weights, predict
 from src.lp_measurement.lp_measurement import get_height_of_license_plate
-from src.utils.image_utils import show, get_image_patch_from_rect
+from src.utils.image_utils import show, get_image_patch_from_rect, draw_rectangle, save_debug_image
 from src.utils.timer import timing
 
 
@@ -29,10 +29,13 @@ class LicensePlateDetection:
     def process_image(self, image, debug_mode):
         gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         lps = self.classifier.detectMultiScale(gray_image)
+
         if debug_mode:
-            for (x, y, w, h) in lps:
-                cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
-            show(image)
+            for box in lps:
+                (left, top, w, h) = box
+                lp_image_patch = cv2.getRectSubPix(image, (w, h), (left + w / 2, top + h / 2))
+                save_debug_image(lp_image_patch, str(abs(hash(image.tostring()))), "plate_candidates")
+
         plates: [Plate] = []
         for box in lps:
             plate = Plate()
@@ -47,9 +50,10 @@ class LicensePlateDetection:
             image_patch = get_image_patch_from_rect(image, plate.box)
             plate.valid = predict(self.lp_validation_model, image_patch)
 
-
     def measure_plate_height(self, image, plate):
         image_patch = get_image_patch_from_rect(image, plate.box)
         plate_height = get_height_of_license_plate(image_patch)
-        if (plate_height is not None):
+        if plate_height is not None:
             plate.height = plate_height
+        else:
+            plate.valid = False

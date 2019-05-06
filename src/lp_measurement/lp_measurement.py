@@ -148,7 +148,8 @@ def get_average_distance_of_lines(line1, line2):
         average_distance_between_lines = 0
         for line in inner_edge_lines:
             average_distance_between_lines += get_line_length(line)
-        return average_distance_between_lines / len(inner_edge_lines)
+        if len(inner_edge_lines) > 0:
+            return average_distance_between_lines / len(inner_edge_lines)
 
 
 def get_height_of_license_plate(lp_image):

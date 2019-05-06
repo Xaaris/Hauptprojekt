@@ -58,4 +58,4 @@ class SpeedEstimator:
                 for plate in vehicle.plates:
                     if plate.valid:
                         last_frame_with_valid_plate = frame.frame_number
-        return last_frame_with_valid_plate
+        return last_frame_with_valid_plate if last_frame_with_valid_plate is not None else frame.frame_number

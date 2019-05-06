@@ -3,7 +3,7 @@ import os
 
 import cv2.cv2 as cv2
 
-path_originals = "../debugImages/plate_candidates/"
+path_originals = "../../../debugImages/plate_candidates/"
 path_positives = "license_plates/positives/"
 path_negatives = "license_plates/negatives/"
 
