@@ -28,11 +28,13 @@ class SpeedEstimator:
                 avg_distance_per_frame = distance_delta_in_m / elapsed_frames
                 estimated_speed = avg_distance_per_frame * self.FRAME_RATE * 3.6
 
+                for _ in range(elapsed_frames):
+                    yield estimated_speed
+
                 # reset
                 last_plate_height = current_plate_height
                 elapsed_frames = 1
 
-                yield estimated_speed
             else:
                 elapsed_frames += 1
 
