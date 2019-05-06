@@ -13,7 +13,6 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Dense, Dropout, Flatten
 from keras.models import Sequential
 
-from src.utils.image_utils import resize_image
 
 batch_size = 32
 num_classes = 2
@@ -22,7 +21,6 @@ epochs = 12
 # input image dimensions
 img_rows, img_cols = 50, 150
 number_of_channels = 3
-
 
 def read_data_set(path_to_images):
     filenames = glob.glob(os.path.join(path_to_images, '*.png'))
@@ -113,16 +111,6 @@ def train_model(model):
     print('Test accuracy:', score[1])
     model.save_weights("model_data/lp_validation.h5")
 
-
-def load_weights(model):
-    model.load_weights(os.path.abspath("lp_validation/model_data/lp_validation.h5"))
-
-
-def predict(model, license_plate_candidate):
-    resized_patch = resize_image(license_plate_candidate, (img_cols, img_rows))
-    expanded_dims_for_batch = np.expand_dims(resized_patch, axis=0)
-    prediction = model.predict(expanded_dims_for_batch)
-    return True if prediction[0][0] >= 0.9 else False
-
-# model = create_model()
-# train_model(model)
+if __name__ == "__main__":
+    model = create_model()
+    train_model(model)

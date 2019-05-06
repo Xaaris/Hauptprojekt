@@ -3,7 +3,8 @@ from numpy.core.multiarray import ndarray
 
 class Plate:
     box: [int, int, int, int]
-    valid: bool
+    valid = False
+    confidence: float
     height: float
 
 
