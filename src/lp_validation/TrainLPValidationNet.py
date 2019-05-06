@@ -111,6 +111,7 @@ def train_model(model):
     print('Test accuracy:', score[1])
     model.save_weights("model_data/lp_validation.h5")
 
+
 if __name__ == "__main__":
     model = create_model()
     train_model(model)
