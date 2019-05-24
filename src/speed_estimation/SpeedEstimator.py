@@ -14,7 +14,7 @@ class SpeedEstimator:
         speed_estimations = [s for s in self._yield_speed_estimations(trimmed_video)]
 
         average_speed = sum(speed_estimations) / len(speed_estimations)
-        print("\nEstimated velocity: " + str(average_speed))
+        print("\nEstimated velocity: " + str(average_speed) + "km/h")
 
     def _yield_speed_estimations(self, trimmed_video):
         last_plate_height = self._get_plate_height_of_first_valid_plate(trimmed_video[0])

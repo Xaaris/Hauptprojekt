@@ -1,3 +1,4 @@
+"""First approach to localizing a license plate, now superseded by LicensePlateDetectionCascadeClassifier using HAAR classifier"""
 import math
 
 import cv2.cv2 as cv2
