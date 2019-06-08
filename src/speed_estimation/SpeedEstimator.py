@@ -16,7 +16,7 @@ class SpeedEstimator:
 
         for i in range(len(speed_estimations)):
             tmp_speed = sum(speed_estimations[:i]) / (i + 1)
-            print("Velocity estimation until " + i + ": " + str(tmp_speed) + " km/h")
+            print("Velocity estimation until " + str(i) + ": " + str(tmp_speed) + " km/h")
 
         average_speed = sum(speed_estimations) / len(speed_estimations)
         print("\nEstimated final velocity: " + str(average_speed) + " km/h")
