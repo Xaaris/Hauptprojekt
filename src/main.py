@@ -11,9 +11,8 @@ if __name__ == "__main__":
     yolo = YOLO()
     license_plate_detection = LicensePlateDetection()
     start = time.time()
-    video = Video("../testFiles/IMG_4717.m4v")
-    path_to_video = video.path_to_file
-    for frame_number, image in enumerate(get_frames(path_to_video, 0, 1.5)):
+    video = Video("../testFiles/25,74kmh.mov")
+    for frame_number, image in enumerate(get_frames(video.path_to_file, 6, 9)):
         frame = Frame(frame_number, image)
         video.frames.append(frame)
         frame.vehicles = yolo.detect_vehicle(frame.image)
@@ -22,7 +21,7 @@ if __name__ == "__main__":
             vehicle.plates = license_plate_detection.detect_license_plate_candidates(car_image)
 
         processed_frame = draw_processed_image(frame)
-        save_debug_image(processed_frame, "frame_" + str(frame.frame_number), "processed_frames", resize_to=(1920, 1080))
+        # save_debug_image(processed_frame, "frame_" + str(frame.frame_number), "processed_frames", resize_to=(1920, 1080))
         print(frame)
 
     total_duration = time.time() - start
