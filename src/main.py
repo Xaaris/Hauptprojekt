@@ -1,6 +1,7 @@
 import time
 
 from src.Video import Frame, Video
+from src.camera_calibration.CameraCalibration import CameraCalibration
 from src.lp_localization.LicensePlateDetectionCascadeClassifier import LicensePlateDetection
 from src.car_detection.yolo import YOLO
 from src.speed_estimation.SpeedEstimator import SpeedEstimator
@@ -10,9 +11,11 @@ from src.utils.image_utils import save_debug_image, get_image_patch_from_rect, g
 if __name__ == "__main__":
     yolo = YOLO()
     license_plate_detection = LicensePlateDetection()
+    camera_calibration = CameraCalibration("camera_calibration/camera_calibration_iPhoneXR_4k_60.npz")
     start = time.time()
     video = Video("../testFiles/25,74kmh.mov")
-    for frame_number, image in enumerate(get_frames(video.path_to_file, 6, 9)):
+    for frame_number, image in enumerate(get_frames(video.path_to_file, 7, 9)):
+        image = camera_calibration.undistort(image)
         frame = Frame(frame_number, image)
         video.frames.append(frame)
         frame.vehicles = yolo.detect_vehicle(frame.image)
