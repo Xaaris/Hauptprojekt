@@ -17,7 +17,7 @@ class CameraCalibration:
         return cv2.undistort(image, self.camera_matrix, self.distortion_coeffs, None, self.camera_matrix_with_crop)
 
 
-def calculate_camera_matrix_and_distortion_coefficients():
+def calculate_camera_matrix_and_distortion_coefficients(camera_model_name):
     # termination criteria
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
@@ -29,7 +29,7 @@ def calculate_camera_matrix_and_distortion_coefficients():
     real_world_points = []  # 3d point in real world space
     image_points = []  # 2d points in image plane.
 
-    image_paths = glob.glob('*.png')
+    image_paths = glob.glob("calibration_images/*.png")
 
     for path_to_image in image_paths:
         img = cv2.imread(path_to_image)
@@ -53,14 +53,13 @@ def calculate_camera_matrix_and_distortion_coefficients():
 
     cv2.destroyAllWindows()
 
-    ret, camera_matrix, distortion_coeffs, rvecs, tvecs = cv2.calibrateCamera(real_world_points, image_points,
-                                                                              gray.shape[::-1], None, None)
+    ret, camera_matrix, distortion_coeffs, rvecs, tvecs = cv2.calibrateCamera(real_world_points, image_points, gray.shape[::-1], None, None)
 
     h, w = gray.shape[:2]
     camera_matrix_with_crop, roi = cv2.getOptimalNewCameraMatrix(camera_matrix, distortion_coeffs, (w, h), 1, (w, h))
 
-    np.savez("camera_calibration_iPhoneXR_4k_60.npz", camera_matrix=camera_matrix, distortion_coeffs=distortion_coeffs,
-             camera_matrix_with_crop=camera_matrix_with_crop)
+    file_name = "camera_calibration_%s.npz" % camera_model_name
+    np.savez(file_name, camera_matrix=camera_matrix, distortion_coeffs=distortion_coeffs, camera_matrix_with_crop=camera_matrix_with_crop)
 
 
 def load_calibration_data(path_to_camera_model_file):
@@ -81,6 +80,6 @@ def undistort(image_path, camera_matrix, distortion_coeffs, camera_matrix_with_c
 
 
 if __name__ == "__main__":
-    calculate_camera_matrix_and_distortion_coefficients()
+    calculate_camera_matrix_and_distortion_coefficients("iPhoneXR_4k_60")
     camera_matrix, distortion_coeffs, camera_matrix_with_crop = load_calibration_data("camera_calibration_iPhoneXR_4k_60.npz")
-    undistort("vlcsnap-2019-06-10-14h49m29s009.png", camera_matrix, distortion_coeffs, camera_matrix_with_crop)
+    undistort("calibration_images/vlcsnap-2019-06-10-14h49m29s009.png", camera_matrix, distortion_coeffs, camera_matrix_with_crop)
