@@ -1,7 +1,7 @@
 """YOLO_v3 Model Defined in Keras."""
 
 import tensorflow as tf
-from keras import backend as K
+from tensorflow.python.keras import backend as K
 
 
 def yolo_head(feats, anchors, num_classes, input_shape):

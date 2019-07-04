@@ -23,7 +23,7 @@ if __name__ == "__main__":
             car_image = get_image_patch_from_rect(frame.image, vehicle.box)
             vehicle.plates = license_plate_detection.detect_license_plate_candidates(car_image)
 
-        processed_frame = draw_processed_image(frame)
+        # processed_frame = draw_processed_image(frame)
         # save_debug_image(processed_frame, "frame_" + str(frame.frame_number), "processed_frames", resize_to=(1920, 1080))
         print(frame)
 

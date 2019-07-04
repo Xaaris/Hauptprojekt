@@ -5,9 +5,9 @@ Class definition of YOLO_v3 style detection model on image and video
 import os
 
 import numpy as np
-from keras import backend as K
-from keras.models import load_model
-from keras.utils import multi_gpu_model
+from tensorflow.python.keras import backend as K
+from tensorflow.python.keras.models import load_model
+from tensorflow.python.keras.utils import multi_gpu_model
 
 from src.Video import Vehicle
 from src.car_detection.model import yolo_eval
