@@ -1,0 +1,110 @@
+% !TEX root = ../thesis.tex
+% Commands for configurations
+%
+% @author: Thomas Lehmann
+
+\RequirePackage{ifthen}
+
+% Configuration values %
+\newcommand{\firstSupervisor}[1]{\newcommand{\IfirstSv}{#1}}
+\newcommand{\secondSupervisor}[1]{\newcommand{\IsecondSv}{#1}}
+\newcommand{\submissionDate}[1]{\newcommand{\ISubDate}{#1}}
+
+% Which regulations (APSO-INGI/APSO-BMT)
+\newcommand{\FakPO}[1]{\newcommand{\IfacultyRegulations}{#1}}
+\newcommand{\PO}[1]{\newcommand{\IcurriculumRegulations}{#1}}
+
+% Title and author
+\newcommand{\thesisTitle}[1]{\newcommand{\IthesisTitle}{#1}}
+\newcommand{\thesisTitleEN}[1]{\newcommand{\IthesisTitleEN}{#1}}
+\newcommand{\thesisAuthor}[1]{\newcommand{\IthesisAuthor}{#1}}
+
+% constant text replacements
+\newcommand{\IthesisFacultyFull}{Fakultät Technik und Informatik}
+\newcommand{\IthesisFacultyFullEN}{Faculty of Computer Science and Engineering}
+
+%% selectable text replacements
+\newcommand{\NDA}[1]
+{
+  \ifthenelse{\equal{#1}{yes}}{\newcommand{\IthesisNDAFull}{STRENG VERTRAULICH}}{\newcommand{\IthesisNDAFull}{}}
+}
+
+\newcommand{\ListOfFigures}[1]
+{
+  \ifthenelse{\equal{#1}{yes}}
+  {\newcommand{\IListOfFigures}{
+    \phantomsection                % needed due to hyperref
+    \addcontentsline{toc}{chapter}{\listfigurename}
+    \listoffigures
+  }}
+  {\newcommand{\IListOfFigures}{}}
+}
+
+\newcommand{\ListOfTables}[1]
+{
+  \ifthenelse{\equal{#1}{yes}}
+  {\newcommand{\IListOfTables}{
+    \phantomsection                % needed due to hyperref
+    \addcontentsline{toc}{chapter}{\listtablename}
+    \listoftables
+  }}
+  {\newcommand{\IListOfTables}{}}
+}
+
+\newcommand{\ListOfAccronyms}[1]
+{
+  \ifthenelse{\equal{#1}{yes}}
+  {\newcommand{\IListOfAccronyms}{
+    \printglossary[type=\acronymtype, title=Abkürzungen]
+  }}
+  {\newcommand{\IListOfAccronyms}{}}
+}
+
+\newcommand{\ListOfSymbols}[1]
+{
+  \ifthenelse{\equal{#1}{yes}}
+  {\newcommand{\IListOfSymbols}{
+    \printglossary[type=symbols, title=Symbolverzeichnis]
+  }}
+  {\newcommand{\IListOfSymbols}{}}
+}
+
+\newcommand{\Glossary}[1]
+{
+  \ifthenelse{\equal{#1}{yes}}
+  {\newcommand{\IGlossary}{
+    \printglossary[title=Glossar]
+  }}
+  {\newcommand{\IGlossary}{}}
+}
+
+\newcommand{\department}[1]
+{
+  \ifthenelse{\equal{#1}{I}}{\newcommand{\IthesisDepartmentFull}{Department Informatik}\newcommand{\IthesisDepartmentFullEN}{Department Computer Science}\newcommand{\Istatement}{\input{../style/statement_ie}}}{}
+  \ifthenelse{\equal{#1}{IE}}{\newcommand{\IthesisDepartmentFull}{Department Informations- und Elektrotechnik}\newcommand{\IthesisDepartmentFullEN}{Department
+      Information and Electrical Engineering}\newcommand{\Istatement}{\input{../style/statement_ie}}}{}
+  \ifthenelse{\equal{#1}{FF}}{\newcommand{\IthesisDepartmentFull}{Department Fahrzeugtechnik und Flugzeugbau}\newcommand{\IthesisDepartmentFullEN}{Department of Automotive and \\
+Aeronautical Engineering}\newcommand{\Istatement}{\input{../style/statement_fuf}}}{}
+}
+
+\newcommand{\thesisKind}[1]
+{
+  \ifthenelse{\equal{#1}{Master}}{\newcommand{\IthesisKind}{Hauptprojekt}\newcommand{\IthesisKindDE}{Hauptprojekt}\newcommand{\IthesisExaminationDE}{Masterprüfung}}{}
+  \ifthenelse{\equal{#1}{Bachelor}}{\newcommand{\IthesisKind}{Bachelorarbeit}\newcommand{\IthesisKindDE}{Bachelorarbeit}\newcommand{\IthesisExaminationDE}{Bachelorprüfung}}{}
+}
+\newcommand{\studycourse}[1]
+{
+  \ifthenelse{\equal{#1}{TI}}{\thesisKind{Bachelor}\department{I}\newcommand{\IstudyCourseName}{Bachelor of Science Technische Informatik}}{}
+  \ifthenelse{\equal{#1}{AI}}{\thesisKind{Bachelor}\department{I}\newcommand{\IstudyCourseName}{Bachelor of Science Angewandte Informatik}}{}
+  \ifthenelse{\equal{#1}{WI}}{\thesisKind{Bachelor}\department{I}\newcommand{\IstudyCourseName}{Bachelor of Science Wirtschaftsinformatik}}{}
+  \ifthenelse{\equal{#1}{EI}}{\thesisKind{Bachelor}\department{IE}\newcommand{\IstudyCourseName}{Bachelor of Science Elektro- und Informationstechnik}}{}
+  \ifthenelse{\equal{#1}{BMT}}{\thesisKind{Bachelor}\department{FF}\newcommand{\IstudyCourseName}{Bachelor of Science Mechatronik}}{}
+  \ifthenelse{\equal{#1}{MAI}}{\thesisKind{Master}\department{I}\newcommand{\IstudyCourseName}{Master of Science Informatik}}{}
+  \ifthenelse{\equal{#1}{MIK}}{\thesisKind{Bachelor}\department{IE}\newcommand{\IstudyCourseName}{Master of Science Informations- und Kommunikationstechnik}}{}
+  \ifthenelse{\equal{#1}{MA}}{\thesisKind{Bachelor}\department{IE}\newcommand{\IstudyCourseName}{Master of Science Automatisierung}}{}
+}
+
+\newcommand{\abstractDE}[1]{\newcommand{\IabstractDE}{#1}}
+\newcommand{\abstractEN}[1]{\newcommand{\IabstractEN}{#1}}
+\newcommand{\keywordsDE}[1]{\newcommand{\IkeyWordsDE}{#1}}
+\newcommand{\keywordsEN}[1]{\newcommand{\IkeyWordsEN}{#1}}

@@ -1,0 +1,79 @@
+\documentclass[
+a4paper,            % DIN A4
+DIV=10,             % Schriftgröße und Satzspiegel
+oneside,            % einseitiger Druck
+BCOR=5mm,           % Bindungskorrektur
+parskip=half,       % Halber Abstand zwischen Absätzen
+numbers=noenddot    % Kein Punkt hinter Kapitelnummern
+]{scrreprt}
+\usepackage{../style/thesisstyle}
+
+\makeglossaries           % create all glossary entries (remember: run makeglossaries manually)
+\loadglsentries{thesisglossaries.tex}  % load acronym, symbol and glossarie entries
+
+
+%Custom
+\usepackage{../style/pgf-pie} % for pie charts
+
+
+\begin{document}
+    \input{configuration/configuration}    % load all settings
+
+    \hyphenation{Ba-che-lor-the-sis Mas-ter-the-sis}
+
+    % Cover page here, no page number
+    \input{../style/coverpage}
+
+    % Titlepage is page one even if the number is not shown.
+    \pagenumbering{roman}
+    % Title page here
+    %\input{../style/titlepage}
+
+    % Abstract page here
+    \input{../style/abstractpage}
+
+    % Table of contents here
+    \tableofcontents
+
+    % List of figures here
+    \IListOfFigures
+
+    % List of tables here
+    %\IListOfTables
+
+    % List of accronyms here
+    \IListOfAccronyms
+
+    % List of symbols here
+    \IListOfSymbols
+
+    % Uncomment if list of source code is needed (rarely).
+    %\lstlistoflistings  % requires package listings, needs to uncommenting of usepackage
+
+    % path to the chapters folder is set to find the images used there
+    \graphicspath{ {./chapters/img/} }
+
+    % Chapters
+    \clearpage
+    \pagenumbering{arabic}
+    \input{chapters/first_chapter}
+    \input{chapters/second_chapter}
+    \input{chapters/third_chapter}
+    \input{chapters/fourth_chapter}
+    \input{chapters/fifth_chapter}
+    %\input{chapters/sixth_chapter}
+    % Add additional chapters here
+
+    %\bibliographystyle{plain}
+    \bibliographystyle{dinat}
+    \bibliography{literature}
+
+    % Appendix
+    %\appendix
+    %\input{appendix/example_appendix}
+
+    \IGlossary
+
+    %\Istatement
+
+\end{document}

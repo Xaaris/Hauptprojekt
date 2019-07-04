@@ -1,0 +1,90 @@
+\chapter{Enhancements} \label{cha:Enhancements}
+
+The system has been enhanced in many ways, from a clearer code structure to newer, more powerful technologies.
+This simplifies further development and improves performance in a major way as will be shown in chapter~\ref{cha:Results}.
+
+
+\section{Upgraded Object Detection Network}
+The first version of this project~\cite{Berger2018} was build on top of the YOLO~\cite{Redmon}, a single shot object detector that achieved state-of-the-art recognition scores when it was introduced in 2016.
+Since then, CNNs have improved significantly and more modern and better performing networks have emerged.
+One of them is YOLOv3~\cite{yolov3} a progression of YOLO and its successors~\cite{Redmon2017} which is roughly 3 times faster than the original one.
+The general architecture is similar to the first iteration with some important improvements.
+YOLOv3 now uses batch normalization which helps to regularize the model and removes the need for the dropout layers.
+It benefits from higher resolution images for training, helping it detect smaller objects and uses a $13 \times 13$ instead of the $7 \times 7$ grid to create the initial anchor boxes which are now based on the actual training data and not hand picket any more.
+It also uses several residual blocks~\cite{He2016} within its total of 56 layers to facilitate the training of this much deeper network.
+
+As I run this project on commodity hardware and want to come as close to real-time performance as possible, it uses a variant of YOLOv3 called tiny-yolo which only uses 20 layers with just one residual block.
+The number of anchor boxes per grid cell is also reduced from 9 to 6.
+This comes at a slight reduction in detection accuracy but the inference time per frame is greatly reduced.
+The performance of this model will be further discussed in chapter~\ref{cha:Results}.
+Another change in regard to the model is that it was switched from a pure TensorFlow implementation to Keras, an abstraction over TensorFlow which makes the code easier to read and more maintainable.
+
+
+\section{License Plate Localization}
+The license plate localization has been reworked to make it faster and more accurate.
+The first iteration of this project used a relatively simple approach of finding the plate by using several different filters provided by OpenCV, such as edge detection, opening and closing operations.
+It then used some simple validations to rule out false positives.
+
+This iteration employs a multi-step approach where regions possibly containing license plates are first selected by a Haar classifier, these regions are then validated by a CNN and the resulting plates are measured with significantly higher accuracy.
+
+\subsection{Haar Classifier}
+
+Haar-like features have been around for some time but they are still the tool of choice in specific use cases, mostly because of the ease of computation and the resulting detection speed~\cite{Viola2001}.
+
+To train the classifier I used the existing license plate localization logic with less strict validation rules to search for potential plate regions within frames of various videos.
+I then labeled those image patches to either contain a license plate or not.
+With this data set I then trained a 20-stage classifier which is used to propose plate regions.
+
+Detailed steps of this process and the accompanying code can be found on GitHub at \href{https://github.com/Xaaris/opencv-haar-classifier-training}{https://github.com/Xaaris/opencv-haar-classifier-training}.
+
+
+\subsection{License Plate Validation}
+The aforementioned classifier is intentionally trained to over-classify regions.
+That means it produces a lot of false positives but the chance of it missing a plate is relatively low.
+Thus there is need for a thorough validation step that eliminates all the false positives.
+As the simple rule based validation from the first iteration of this project was not enough anymore, I instead opted to use a convolutional neural network.
+
+\subsection{License Plate Height Measurement}
+
+genauere bestimmung der maße?
+
+
+
+
+\section{Camera Calibration}
+
+Commercially available standard cameras unfortunately come along with one major weakness: significant distortion.
+Luckily, as the distortions are fixed constants for a given camera model we can easily measure them and correct the resulting picture for them.
+To be able to do so we first have to measure the camera properties by taking pictures of known patterns, such as a chessboard pattern.
+By taking multiple pictures from various angles we can then calculate the intrinsic camera matrix with $f$ being the focal length in either direction and $c$ being the principal point, usually at the image center.
+\[
+    camera \hspace{5px}matrix =
+    \begin{bmatrix}
+        f_{x} & 0 & c_{x} \\
+        0 & f_{y} & c_{y} \\
+        0 & 0 & 1
+    \end{bmatrix}
+\]
+
+This matrix needs to be scaled along the image size in case its dimensions are altered.
+We can also calculate the rotation distortion
+
+\begin{align*}
+    x_{corrected} &= x(1 + k_{1}r^{2} + k_{2}r^{4} + k_{3}r^{6}) \\
+    y_{corrected} &= y(1 + k_{1}r^{2} + k_{2}r^{4} + k_{3}r^{6})
+\end{align*}
+
+as well as the translation distortion in the x and y dimensions.
+\begin{align*}
+    x_{corrected} &= x + (2p_{1}xy + p_{2}(r^{2} + 2x^{2})) \\
+    y_{corrected} &= y + (p_{1} (r^{2} + 2y^{2}) + 2p_{2}xy)
+\end{align*}
+
+These values are fixed and don't depend on the image scale.
+With these parameters in place we can correctly translate points from the real world to pixels in a photo.
+Figure~\ref{distortionExample.png} shows how extreme examples could look like.
+It also demonstrates clearly that we might lose some pixels at the edges of the picture when correcting for the distortion.
+To not end up with black bars around the edges another matrix is used to crop the image to the region of interest.
+On an actual example the loss of information in the picture is minimal, so that we do not need to worry that important parts of the image are cropped.
+
+\includenamedimage[0.7]{distortionExample.png}{No distortion on the left while the middle example shows positive radial distortion and the right example shows negative radial distortion \cite{OpenCV2016}}{Distortion Example}

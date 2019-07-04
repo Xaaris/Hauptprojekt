@@ -1,0 +1,25 @@
+\chapter{Introduction}\label{ch:introduction}
+
+Measuring the speed of a passing vehicle is a common practice in our society to regulate traffic and ensure road safety.
+It can be achieved in a variety of ways such as with a radar gun, induction loops or cameras fixed to overarching bridges.
+All those methods require large, expensive technical equipment which is not trivial to come by or to handle.
+In this paper a computer vision system is proposed which takes arbitrary video files, analyzes them for vehicles and returns a velocity estimation.
+It does so by measuring the height of the license plates of the passing cars, an object with known dimensions as they are standardized.
+
+This system is a progression of a much simpler system build for the first masters project (\textit{Grundprojekt}).
+The system back then was capable of locating license plates within a picture.
+It did so by finding vehicles with the help of a convolutional neural network (CNN) and then applying various filters and operators on the determined region to precisely locate the license plate.
+
+The new system described in this work improves on that in a variety of ways.
+The CNN used to detect vehicles is more capable and a lot faster.
+This also shows dramatically in the number of frames the system is able to process per second.
+The license plate localization was completely reworked and is using a two step approach now.
+It uses HAAR classifiers to propose regions where license plates might be located.
+This is very fast but results in a lot of false positives.
+That is why in a second step a CNN is used to validate if a region proposal really contains a plate.
+This method results in a much higher hit rate compared to the first version but is a the same time a lot more efficient than a sliding window approach.
+Furthermore the exact dimensions of the detected license plate are now calculated using curve fitting to get the most accurate result.
+
+
+lisenkorrektur?
+

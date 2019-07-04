@@ -1,0 +1,57 @@
+% !TEX root = ../thesis.tex
+%
+% title page
+% @author Thomas Lehmann
+% Hints for titel page and page numbering: https://en.wikipedia.org/wiki/Title_page
+%
+\newpage
+\thispagestyle{empty}
+{\fontfamily{phv}\selectfont
+  \hfuzz=20pt       % suppress warnings due to extenstion onto page margins
+
+  % Author of thesis
+  % TODO: Select correct font
+  \vspace*{1cm}
+  \begin{minipage}[b]{\textwidth}
+    \fontsize{14pt}{20pt}
+    \selectfont
+    \begin{center}
+      \IthesisAuthor
+    \end{center}
+  \end{minipage}
+
+  % Title of thesis
+  % TODO: Select correct font
+  \vspace{1.5cm}
+  \begin{minipage}[b][0cm][t]{\textwidth}
+    \fontsize{18pt}{20pt}
+    \selectfont
+    \begin{center}
+      \IthesisTitle
+  	\end{center}
+  \end{minipage}
+
+  % Important information
+  % TODO: Select correct font
+  \begin{textblock*}{\textwidth}(40mm,210mm)
+    \begin{minipage}[b]{\textwidth}
+      \hbadness=10001    % suppress underfull warning due to short text
+      \fontfamily{ptm}\selectfont
+      \fontsize{12pt}{14pt}
+      \selectfont
+      Masterarbeit eingereicht im Rahmen der Masterprüfung \\
+      im gemeinsamen Masterstudiengang Mikroelektronische Systeme\\
+      am Fachbereich Technik\\
+      der Fachhochschule Westküste\\
+      und\\
+      am Department Informations- und Elektrotechnik\\
+      der Fakultät Technik und Informatik\\
+      der Hochschule für Angewandte Wissenschaften Hamburg\\
+
+      Betreuender Prüfer: \IfirstSv \\
+      Zweitgutachter: \IsecondSv \\
+
+      Eingereicht am: \ISubDate \\
+    \end{minipage}
+  \end{textblock*}
+}
