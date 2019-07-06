@@ -1,4 +1,4 @@
-\chapter{Enhancements} \label{cha:Enhancements}
+\chapter{Enhancements} \label{ch:enhancements}
 
 The system has been enhanced in many ways, from a clearer code structure to newer, more powerful technologies.
 This simplifies further development and improves performance in a major way as will be shown in chapter~\ref{cha:Results}.
@@ -108,7 +108,7 @@ as well as the translation distortion in the x and y dimensions.
 
 These values are fixed and don't depend on the image scale.
 With these parameters in place we can correctly translate points from the real world to pixels in a photo.
-Figure~\ref{distortionExample.png} shows how extreme examples could look like.
+Figure~\ref{fig:distortionExample.png} shows how extreme examples could look like.
 It also demonstrates clearly that we might lose some pixels at the edges of the picture when correcting for the distortion.
 To not end up with black bars around the edges another matrix is used to crop the image to the region of interest.
 On an actual example the loss of information in the picture is minimal, so that we do not need to worry that important parts of the image are cropped.
