@@ -14,7 +14,7 @@ if __name__ == "__main__":
     camera_calibration = CameraCalibration("camera_calibration/camera_calibration_iPhoneXR_4k_60.npz")
     start = time.time()
     video = Video("../testFiles/25,74kmh.mov")
-    for frame_number, image in enumerate(get_frames(video.path_to_file, 7, 9)):
+    for frame_number, image in enumerate(get_frames(video.path_to_file, from_sec=7, to_sec=9)):
         image = camera_calibration.undistort(image)
         frame = Frame(frame_number, image)
         video.frames.append(frame)
@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     total_duration = time.time() - start
     fps = frame.frame_number / total_duration
-    print("\nTotal duration: " + str(total_duration) + "s, FPS: " + str(fps))
+    print("\nTotal duration: {0:.2f}, FPS: {1:.2f}\n".format(total_duration, fps))
 
     timer.print_timing_results()
 
