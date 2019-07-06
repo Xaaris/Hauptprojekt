@@ -44,13 +44,13 @@ def find_lp_contour(image):
     thresholded_open = cv2.morphologyEx(thresholded_close, cv2.MORPH_OPEN, kernel)
     contours = cv2.findContours(thresholded_open.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)[-2]
     biggest_contour = sorted(contours, key=cv2.contourArea, reverse=True)[0]
-    image_copy = np.copy(image)
-    cv2.drawContours(image_copy, [biggest_contour], -1, (0, 255, 0), 1)
+    # image_copy = np.copy(image)
+    # cv2.drawContours(image_copy, [biggest_contour], -1, (0, 255, 0), 1)
 
     perimeter = cv2.arcLength(biggest_contour, True)
     approx_poly = cv2.approxPolyDP(biggest_contour, 0.01 * perimeter, True)
-    image_copy2 = np.copy(image)
-    cv2.drawContours(image_copy2, [approx_poly], -1, (0, 255, 0), 1)
+    # image_copy2 = np.copy(image)
+    # cv2.drawContours(image_copy2, [approx_poly], -1, (0, 255, 0), 1)
     return approx_poly
 
 
@@ -63,8 +63,8 @@ def perfect_line(image, line):
     points_on_line = get_equidistant_points(pt1, pt2, 10)
     actual_line_points = []
     for point in points_on_line:
-        first_point = get_point_at(point, ten_percent_of_image_height, angle_rad + np.pi / 2)
-        second_point = get_point_at(point, - ten_percent_of_image_height, angle_rad + np.pi / 2)
+        first_point = get_pixel_at(point, ten_percent_of_image_height, angle_rad + np.pi / 2)
+        second_point = get_pixel_at(point, - ten_percent_of_image_height, angle_rad + np.pi / 2)
         cv2.line(image, first_point, second_point, (0, 0, 255), 1)
         number_of_measuring_points = 10
         measuring_points = get_equidistant_points(first_point, second_point, number_of_measuring_points)
@@ -78,8 +78,8 @@ def perfect_line(image, line):
         if line_point_in_array is not None:
             actual_line_point = get_point_at(first_point, line_point_in_array, angle_rad - np.pi / 2)
             actual_line_points.append(actual_line_point)
-            cv2.line(image, actual_line_point, get_point_at(actual_line_point, ten_percent_of_image_height, angle_rad), (0, 255, 0), 1)
-
+    #         cv2.line(image, (int(actual_line_point[0]), int(actual_line_point[1])), get_pixel_at(actual_line_point, ten_percent_of_image_height, angle_rad), (0, 255, 0), 1)
+    #
     # show(image, "measuring")
     line_start, line_end = best_fit_line_from_points(actual_line_points)
     return line_start, line_end
@@ -90,8 +90,8 @@ def best_fit_line_from_points(points):
     ys = [p[1] for p in points]
     line_coeffs = poly.polyfit(xs, ys, 1)
     line_polynom = np.poly1d(line_coeffs[::-1])
-    line_start = (xs[0], int(line_polynom(xs[0])))
-    line_end = (xs[-1], int(line_polynom(xs[-1])))
+    line_start = (int(xs[0]), int(line_polynom(xs[0])))
+    line_end = (int(xs[-1]), int(line_polynom(xs[-1])))
     return line_start, line_end
 
 
@@ -110,8 +110,12 @@ def get_equidistant_points(pt1, pt2, num_of_points):
                np.linspace(pt1[1], pt2[1], num_of_points, dtype=int))
 
 
-def get_point_at(origin, dist, theta):
+def get_pixel_at(origin, dist, theta):
     return int(origin[0] + dist * math.cos(theta)), int(origin[1] + dist * math.sin(theta))
+
+
+def get_point_at(origin, dist, theta):
+    return origin[0] + dist * math.cos(theta), origin[1] + dist * math.sin(theta)
 
 
 def get_line_length(line):
@@ -158,3 +162,13 @@ def get_height_of_license_plate(lp_image):
     lines = get_2_longest_lines_from_contour(lp_contour)
     final_lines = [perfect_line(balanced_image, line) for line in lines]
     return get_average_distance_of_lines(final_lines[0], final_lines[1])
+
+
+if __name__ == "__main__":
+    lp_image = load_image("4386399993575093578.png")
+    balanced_image = correct_white_balance(lp_image)
+    lp_contour = find_lp_contour(balanced_image)
+    lines = get_2_longest_lines_from_contour(lp_contour)
+    final_lines = [perfect_line(balanced_image, line) for line in lines]
+    augmented_image = draw_lines(lp_image, final_lines)
+    show(augmented_image)
