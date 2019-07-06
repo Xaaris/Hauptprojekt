@@ -46,11 +46,35 @@ As the simple rule based validation from the first iteration of this project was
 
 \subsection{License Plate Height Measurement}
 
-genauere bestimmung der maße?
-% TODO: write
-\includenamedimage[0.45]{lpMeasuring1.png}{blubb}{Distortion Example}
-\includenamedimage[0.45]{lpMeasuring2.png}{bla}{Distortion Example}
+The exact measurement of the license plate height is of utmost importance as it is the reference on which the velocity estimation is based.
+In the previous section an image patch is obtained which is validated to include a license plate.
+To measure the height of it the image is first white-balance corrected to get more consistent results.
+It is then converted to a binary representation based on the intensity of each pixel and undergoes some morphological operations to find a clear outline of the license plate.
+the upper and lower edges of this outline are then further refined by placing a number of equidistant refinement points on them.
+For every one of these points the close vicinity in the perpendicular direction to the original line is scanned to determine where exactly the edge of the plate is located with sub-pixel accuracy.
+A best-fit line is then calculated based on those points.
+The height of the license plate is then assumed to be the average distance between the upper and the lower refined edges.
+Figure~\ref{fig:lpMeasuring} shows two steps from the process where (a) displays the refinement points (10 for each line in this case) and (b) shows the final calculated edges.
 
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{.47\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{lpMeasuring1.png}
+        \caption{Individual measuring points along the upper and lower edges of the license plate}
+        \label{fig:lpMeasuring1.png}
+    \end{subfigure}%
+    \hspace{.05\textwidth}
+    \begin{subfigure}{.47\textwidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{lpMeasuring2.png}
+        \caption{Final upper and lower lines determined by the algorithm}
+        \label{fig:lpMeasuring2.png}
+    \end{subfigure}
+    \caption[Steps during the height measurement of a license plate]{Steps during the height measurement of a license plate (plates masked for privacy reasons)}
+    \label{fig:lpMeasuring}
+\end{figure}
 
 
 \section{Camera Calibration}
@@ -89,4 +113,4 @@ It also demonstrates clearly that we might lose some pixels at the edges of the 
 To not end up with black bars around the edges another matrix is used to crop the image to the region of interest.
 On an actual example the loss of information in the picture is minimal, so that we do not need to worry that important parts of the image are cropped.
 
-\includenamedimage[0.7]{distortionExample.png}{No distortion on the left while the middle example shows positive radial distortion and the right example shows negative radial distortion \cite{OpenCV2016}}{Distortion Example}
+\includenamedimage[0.7]{distortionExample.png}{No distortion on the left while the middle example shows positive radial distortion and the right example shows negative radial distortion~\cite{OpenCV2016}}{Distortion Example}
