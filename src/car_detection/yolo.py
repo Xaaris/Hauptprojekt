@@ -19,8 +19,8 @@ from tensorflow.python import debug as tf_debug
 @timing
 class YOLO(object):
     _defaults = {
-        # "model_path": 'model_data/yolo.h5',
-        # "anchors_path": 'model_data/yolo_anchors.txt',
+        # "model_path": 'car_detection/model_data/yolo.h5',
+        # "anchors_path": 'car_detection/model_data/yolo_anchors.txt',
         "model_path": 'car_detection/model_data/yolo_tiny.h5',
         "anchors_path": 'car_detection/model_data/tiny_yolo_anchors.txt',
         "classes_path": 'car_detection/model_data/coco_classes.txt',
