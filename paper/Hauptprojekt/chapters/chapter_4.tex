@@ -1,9 +1,86 @@
-
 \chapter{Results} \label{cha:Results}
 
+This chapter will give an overview on the improvements in performance and accuracy achieved in comparison to the first iteration~\cite{Berger2018} of this project.
+It will also highlight challenges and situations the system can't cope with.
+
+\section{Performance}
 FPS doubled
 Compare tiny yolo to normal yolo
 
-Accuracy:
-measured 60m with stopwatch at various speeds multiple times (make table with actual and expected speeds)
-Measured lens factor. focal length not officially documented for video as it crops in from foto
+The various enhancements described in chapter~\ref{ch:enhancements} have a big impact on the overall performance of the system.
+When the first system used to run at around two frames per second (FPS) on a MacBook Pro from 2015, this iteration runs at four FPS or even eight without undistorting the frames.
+This translates to roughly 45 and 90 FPS respectively on a current high-power desktop machine with a capable GPU\@.
+Figure~\ref{fig:timing} shows how much time is consumed by each individual subsystem when working on a lengthy 4k video featuring a single car in every frame.
+As is evident from that pie chart, most of the time is spent correcting for the lens distortion.
+This is an expensive operation as it is done on relatively large images with a resolution of $3840 \times 2160$ pixel.
+One needs to decide if it is worth to take this performance hit or to rather trade it for a little higher error margin in the speed estimation.
+
+The system can be run with two different variants of the YOLO detection network: YOLOv3 and tiny-YOLOv3.
+The full-blown network has a higher detection rate but also takes about $7.5$ times the time for inference.
+In my testing the tiny variant achieves around $95\%$ of the detections compared to the full network.
+
+Finding and validating a license plate within the image patch of a car is pretty quick and takes around 40ms of which the validation is roughly a fourth.
+This is because it is working on vastly smaller image files.
+While the license plate detection works only on sections of the original frame containing a vehicle the validation of the plates runs on images of $150 \times 50$ pixels.
+
+The remaining time can be attributed to cropping of images, saving the resulting files and the time measurement itself.
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        \pie [text=legend, rotate = 90, color={blue!90, blue!70, blue!50, blue!30, blue!10}]
+        {
+        53/Undistortion,
+        20/Car detection with tiny-YOLOv3,
+        12/License plate detection,
+        11/Other,
+        4/License plate validation
+        }
+    \end{tikzpicture}
+    \caption{Timing of individual subsystems}
+    \label{fig:timing}
+\end{figure}
+
+
+
+\section{Accuracy}
+
+The first iteration of this project had two main accuracy measures: the vehicle detection and the license plate extraction.
+As they did not change significantly from the first project, this section focuses on a new measure: the speed estimation and its accuracy compared to ground truth.
+
+To obtain video footage with ground truth speed a path of \SI{60}{\metre} was measured and a car was driven along it multiple times.
+The time was taken with a stopwatch to be able to calculate the speed as accurately as possible.
+Figure~\ref{fig:speedMeasurement.png} shows a sample frame from one of these videos in which you can see the car and one of the marker pales on the right.
+
+\includenamedimage[0.7]{speedMeasurement.png}{Frame from video for ground truth speed measurement}{Frame from video for ground truth speed measurement}
+
+From the measured time, the speed can be easily calculated.
+The videos are cut to only contain the few seconds in which the car goes by and are then put through the prediction system.
+In addition a video of a parking car was taken as a validation mechanism.
+Table~\ref{tab:speedEstimation} shows the calculated ground truth speed in comparison to the estimated speed by this system.
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{|r|r|}
+        \hline
+        \multicolumn{1}{|l|}{Ground truth} & \multicolumn{1}{l|}{calculated speed} \\ \hline
+        \SI{0.0}{\kilo\metre\per\hour}     & \SI{0.32}{\kilo\metre\per\hour}      \\
+        \SI{9.9}{\kilo\metre\per\hour}     & \SI{10.06}{\kilo\metre\per\hour}      \\
+        \SI{9.97}{\kilo\metre\per\hour}    & \SI{10.13}{\kilo\metre\per\hour}      \\
+        \SI{10.05}{\kilo\metre\per\hour}   & \SI{10.22}{\kilo\metre\per\hour}      \\
+        \SI{17.06}{\kilo\metre\per\hour}   & \SI{18.77}{\kilo\metre\per\hour}      \\
+        \SI{25.74}{\kilo\metre\per\hour}   & \SI{25.71}{\kilo\metre\per\hour}      \\ \hline
+    \end{tabular}
+    \caption{Ground truth speed measurements \\and estimations from the video}
+    \label{tab:speedEstimation}
+\end{table}
+
+All in all the results are looking promising as the deviation from the ground truth is rather small.
+Of course the ground truth in itself is not perfect and gets less precise the higher the speed is.
+That is why only examples of moderate speed are used as a validation set here.
+
+
+
+
+\section{Edge Cases}
+

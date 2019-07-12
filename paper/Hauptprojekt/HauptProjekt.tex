@@ -14,6 +14,8 @@ numbers=noenddot    % Kein Punkt hinter Kapitelnummern
 
 %Custom
 \usepackage{../style/pgf-pie} % for pie charts
+\usepackage{booktabs}
+\sisetup{per-mode = symbol}
 
 
 \begin{document}
@@ -57,11 +59,11 @@ numbers=noenddot    % Kein Punkt hinter Kapitelnummern
     \clearpage
     \pagenumbering{arabic}
     \input{chapters/chapter_1}
-%    \input{chapters/chapter_2}
+    %    \input{chapters/chapter_2}
     \input{chapters/chapter_3}
     \input{chapters/chapter_4}
     \input{chapters/chapter_5}
-%    \input{chapters/chapter_6}
+    %    \input{chapters/chapter_6}
     % Add additional chapters here
 
     %\bibliographystyle{plain}
