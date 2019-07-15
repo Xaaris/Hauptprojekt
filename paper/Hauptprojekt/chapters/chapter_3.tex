@@ -5,7 +5,7 @@ This simplifies further development and improves performance in a major way as w
 
 
 \section{Upgraded Object Detection Network}
-The first version of this project~\cite{Berger2018} was build on top of the YOLO~\cite{Redmon}, a single shot object detector that achieved state-of-the-art recognition scores when it was introduced in 2016.
+The first version of this project~\cite{Berger2018} was built on top of the YOLO~\cite{Redmon}, a single shot object detector that achieved state-of-the-art recognition scores when it was introduced in 2016.
 Since then, CNNs have improved significantly and more modern and better performing networks have emerged.
 One of them is YOLOv3~\cite{yolov3} a progression of YOLO and its successors~\cite{Redmon2017} which is roughly 3 times faster than the original one.
 The general architecture is similar to the first iteration with some important improvements.
@@ -41,8 +41,8 @@ Detailed steps of this process and the accompanying code can be found on GitHub 
 \subsection{License Plate Validation}
 The aforementioned classifier is intentionally trained to over-classify regions.
 That means it produces a lot of false positives but the chance of it missing a plate is relatively low.
-Thus there is need for a thorough validation step that eliminates all the false positives.
-As the simple rule based validation from the first iteration of this project was not enough anymore, I instead opted to use a convolutional neural network.
+Thus, there is need for a thorough validation step that eliminates all the false positives.
+As the simple rule-based validation from the first iteration of this project was not enough anymore, I instead opted to use a convolutional neural network.
 
 \subsection{License Plate Height Measurement}
 
@@ -82,7 +82,7 @@ Figure~\ref{fig:lpMeasuring} shows two steps from the process where (a) displays
 %TODO: Measured lens factor. focal length not officially documented for video as it crops in from foto
 
 Commercially available standard cameras unfortunately come along with one major weakness: significant distortion.
-Luckily, as the distortions are fixed constants for a given camera model we can easily measure them and correct the resulting picture for them.
+Luckily, as the distortions are fixed constants for a given camera model, we can easily measure them and correct the resulting picture for them.
 To be able to do so we first have to measure the camera properties by taking pictures of known patterns, such as a chessboard pattern.
 By taking multiple pictures from various angles we can then calculate the intrinsic camera matrix with $f$ being the focal length in either direction and $c$ being the principal point, usually at the image center.
 \[

@@ -56,7 +56,7 @@ Figure~\ref{fig:speedMeasurement.png} shows a sample frame from one of these vid
 
 From the measured time, the speed can be easily calculated.
 The videos are cut to only contain the few seconds in which the car goes by and are then put through the prediction system.
-In addition a video of a parking car was taken as a validation mechanism.
+In addition, a video of a parking car was taken as a validation mechanism.
 Table~\ref{tab:speedEstimation} shows the calculated ground truth speed in comparison to the estimated speed by this system.
 
 \begin{table}[]
@@ -75,10 +75,17 @@ Table~\ref{tab:speedEstimation} shows the calculated ground truth speed in compa
     \label{tab:speedEstimation}
 \end{table}
 
-All in all the results are looking promising as the deviation from the ground truth is rather small.
-Of course the ground truth in itself is not perfect and gets less precise the higher the speed is.
+All in all, the results are looking promising as the deviation from the ground truth is rather small.
+The results are on par with other non-intrusive speed measurement techniques such as a laser or radar gun~\cite{Adnan2013}.
+Of course, the ground truth in itself is not perfect and gets less precise the higher the speed is.
 That is why only examples of moderate speed are used as a validation set here.
 
+The general rule is the system will be more accurate the lower the driving speed is, as it has more frames to sample data from.
+It can reliably detect license plates when they are roughly 10 pixels or more in height which translates into a 30m distance from the camera to the plate when filming in 4k on an iPhone XR.
+As the plates are generally in focus up to a distance of 3m, this results into a test distance of 27m.
+A vehicle going by with an average speed of \SI{25}{\kilo\metre\per\hour} will pass this test track in \SI{3.88}{\second} resulting in up to 232 frames and therefore measuring points and a high precision in speed estimation.
+But as doubling the initial speed will half the time the vehicle needs to pass the test track, the maximum number of measuring points is also halved.
+Motion blur at higher speeds will further impact the accuracy of the results in a negative way.
 
 
 
