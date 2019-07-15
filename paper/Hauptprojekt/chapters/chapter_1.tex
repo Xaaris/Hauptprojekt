@@ -13,10 +13,10 @@ It did so by finding vehicles with the help of a convolutional neural network (C
 The new system described in this work improves on that in a variety of ways.
 The CNN used to detect vehicles is more capable, has a higher detection rate and is still faster.
 This also shows dramatically in the number of frames the system is able to process per second.
-The license plate localization was completely reworked and is using a two step approach now.
+The license plate localization was completely reworked and is using a two-step approach now.
 It uses Haar classifiers to propose regions where license plates might be located.
 This is very fast but results in a lot of false positives.
 That is why in a second step a CNN is used to validate if a region proposal really contains a plate.
-This method results in a much higher hit rate compared to the first version but is a the same time a lot more efficient than a sliding window approach.
-Furthermore the exact dimensions of the detected license plate are now calculated using curve fitting to get the most accurate result.
+This method results in a much higher hit rate compared to the first version but at the same time is a lot more efficient than a sliding window approach.
+Furthermore, the exact dimensions of the detected license plate are now calculated using curve fitting to get the most accurate result.
 To further reduce the margin of error camera calibration was introduced to correct each video frame for lens distortion.

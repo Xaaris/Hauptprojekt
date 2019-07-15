@@ -89,5 +89,11 @@ Motion blur at higher speeds will further impact the accuracy of the results in 
 
 
 
-\section{Edge Cases}
+\section{Limitations}
 
+The here proposed system has two key limitations: It only works for a single vehicle in the video and is highly dependent on the image quality and therefore on the quality of the camera that is used to produce the input files.
+The less light there is, e.g.\ at dusk, dawn or in tunnels, the better the camera has to be to compensate for it with a bigger sensor and higher photosensitivity.
+Alternatively, an infra-red camera could be used, but that would probably necessitate a retraining of the system to cope with the different image data.
+
+The fact that the system can only work with a single vehicle in the video is due to the lack of a mechanism to connect the same vehicle across multiple frames.
+A means of centroid tracking would need to be implemented to remedy this.
