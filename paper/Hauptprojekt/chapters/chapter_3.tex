@@ -79,8 +79,6 @@ Figure~\ref{fig:lpMeasuring} shows two steps from the process where (a) displays
 
 \section{Camera Calibration}
 
-%TODO: Measured lens factor. focal length not officially documented for video as it crops in from foto
-
 Commercially available standard cameras unfortunately come along with one major weakness: significant distortion.
 Luckily, as the distortions are fixed constants for a given camera model, we can easily measure them and correct the resulting picture for them.
 To be able to do so we first have to measure the camera properties by taking pictures of known patterns, such as a chessboard pattern.
@@ -116,3 +114,11 @@ To not end up with black bars around the edges another matrix is used to crop th
 On an actual example the loss of information in the picture is minimal, so that we do not need to worry that important parts of the image are cropped.
 
 \includenamedimage[0.7]{distortionExample.png}{No distortion on the left while the middle example shows positive radial distortion and the right example shows negative radial distortion~\cite{OpenCV2016}}{Distortion Example}
+
+Another quantity that needs to be known is the focal length of the camera.
+It is needed to calculate the distance from the lens to an object, in this case to the license plate.
+The focal length of the used camera is known~\cite{AppleInc.2019} but unfortunately only for photos.
+When shooting a video, the camera automatically crops in an undocumented amount and only uses part of the sensor.
+Therefore, the effective focal length needs to be measured manually.
+This can be done by filming a real-world object of which the dimensions are known, such as a ruler from a known distance.
+
