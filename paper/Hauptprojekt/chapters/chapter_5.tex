@@ -1,2 +1,15 @@
 
-\chapter{Outlook and Conclusion} \label{cha:Outlook}
+\chapter{Outlook and Conclusion} \label{ch:outlook}
+
+The results show that it is possible to estimate the speed of vehicles in videos to a fairly accurate degree using the known dimensions of the license plates.
+The advantages are that only a commodity camera such as a smartphone and some computing power is needed instead of specialized equipment i.e.\ a radar or laser gun.
+Disadvantages include limitations regarding low light scenarios and the measurement when multiple cars are in the video frame.
+Some of those can be rather easily addressed in software as said in section~\ref{sec:limitations}, but others require additional hardware.
+
+The overall complexity of the system makes it difficult to verify its precision and performance accurately.
+Further testing is required to precisely measure the error of speed estimation, especially regarding higher speeds.
+
+As the system is only trained on German license plates, it would need to be retrained when deploying it to a different locale, especially when license plate dimensions or colors are different.
+A mechanism to measure the speed of motor-bikes would go into a similar direction.
+
+Overall the system as it stands now is a big step up in utility, maintainability and extensibility from the first iteration build during the \textit{Grundproject}.

@@ -1,7 +1,7 @@
 \chapter{Enhancements} \label{ch:enhancements}
 
 The system has been enhanced in many ways, from a clearer code structure to newer, more powerful technologies.
-This simplifies further development and improves performance in a major way as will be shown in chapter~\ref{cha:Results}.
+This simplifies further development and improves performance in a major way as will be shown in chapter~\ref{ch:results}.
 
 
 \section{Upgraded Object Detection Network}
@@ -16,7 +16,7 @@ It also uses several residual blocks~\cite{He2016} within its total of 56 layers
 As I run this project on commodity hardware and want to come as close to real-time performance as possible, it uses a variant of YOLOv3 called tiny-yolo which only uses 20 layers with just one residual block.
 The number of anchor boxes per grid cell is also reduced from 9 to 6.
 This comes at a slight reduction in detection accuracy but the inference time per frame is greatly reduced.
-The performance of this model will be further discussed in chapter~\ref{cha:Results}.
+The performance of this model will be further discussed in chapter~\ref{ch:results}.
 Another change in regard to the model is that it was switched from a pure TensorFlow implementation to Keras, an abstraction over TensorFlow which makes the code easier to read and more maintainable.
 
 
