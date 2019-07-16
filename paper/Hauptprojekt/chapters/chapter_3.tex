@@ -5,15 +5,15 @@ This simplifies further development and improves performance in a major way as w
 
 
 \section{Upgraded Object Detection Network}
-The first version of this project~\cite{Berger2018} was built on top of the YOLO~\cite{Redmon}, a single shot object detector that achieved state-of-the-art recognition scores when it was introduced in 2016.
+The first version of this project~\cite{Berger2018} was built on top of the first version of YOLO~\cite{Redmon}, a single shot object detector that achieved state-of-the-art recognition scores when it was introduced in 2016.
 Since then, CNNs have improved significantly and more modern and better performing networks have emerged.
 One of them is YOLOv3~\cite{yolov3} a progression of YOLO and its successors~\cite{Redmon2017} which is roughly 3 times faster than the original one.
 The general architecture is similar to the first iteration with some important improvements.
 YOLOv3 now uses batch normalization which helps to regularize the model and removes the need for the dropout layers.
-It benefits from higher resolution images for training, helping it detect smaller objects and uses a $13 \times 13$ instead of the $7 \times 7$ grid to create the initial anchor boxes which are now based on the actual training data and not hand picket any more.
+It benefits from higher resolution images for training, helping it detect smaller objects and uses a $13 \times 13$ instead of the $7 \times 7$ grid to create the initial anchor boxes which carry now dimensions based on the actual training data and are not hand crafted any more.
 It also uses several residual blocks~\cite{He2016} within its total of 56 layers to facilitate the training of this much deeper network.
 
-As I run this project on commodity hardware and want to come as close to real-time performance as possible, it uses a variant of YOLOv3 called tiny-yolo which only uses 20 layers with just one residual block.
+As I run this project on commodity hardware and want to come as close to real-time performance as possible, a variant of YOLOv3 called tiny-yolo is used, which only uses 20 layers with just one residual block.
 The number of anchor boxes per grid cell is also reduced from 9 to 6.
 This comes at a slight reduction in detection accuracy but the inference time per frame is greatly reduced.
 The performance of this model will be further discussed in chapter~\ref{ch:results}.
@@ -43,12 +43,17 @@ The aforementioned classifier is intentionally trained to over-classify regions.
 That means it produces a lot of false positives but the chance of it missing a plate is relatively low.
 Thus, there is need for a thorough validation step that eliminates all the false positives.
 As the simple rule-based validation from the first iteration of this project was not enough anymore, I instead opted to use a convolutional neural network.
+The resulting CNN is a simple 8 layer network consisting of two convolutional, one pooling, two dropout and two dense layer after a flattening step.
+It is trained on a few hundred hand selected examples of images classified as either containing a license plate or not.
+Training images have dimensions of $150 \times 50$ pixels with three color channels.
+Data augmentation in form of small deviations in rotation, sheering and brightness is employed to achieve acceptable results in spite of the low number of training examples.
+
 
 \subsection{License Plate Height Measurement}
 
 The exact measurement of the license plate height is of utmost importance as it is the reference on which the velocity estimation is based.
 In the previous section an image patch is obtained which is validated to include a license plate.
-To measure the height of it the image is first white-balance corrected to get more consistent results.
+To measure the height of it, the image is first white-balance corrected to get more consistent results.
 It is then converted to a binary representation based on the intensity of each pixel and undergoes some morphological operations to find a clear outline of the license plate.
 the upper and lower edges of this outline are then further refined by placing a number of equidistant refinement points on them.
 For every one of these points the close vicinity in the perpendicular direction to the original line is scanned to determine where exactly the edge of the plate is located with sub-pixel accuracy.
@@ -106,11 +111,11 @@ as well as the translation distortion in the x and y dimensions.
     y_{corrected} &= y + (p_{1} (r^{2} + 2y^{2}) + 2p_{2}xy)
 \end{align*}
 
-These values are fixed and don't depend on the image scale.
+The latter two values are fixed and don't depend on the image scale.
 With these parameters in place we can correctly translate points from the real world to pixels in a photo.
 Figure~\ref{fig:distortionExample.png} shows how extreme examples could look like.
 It also demonstrates clearly that we might lose some pixels at the edges of the picture when correcting for the distortion.
-To not end up with black bars around the edges another matrix is used to crop the image to the region of interest.
+To not end up with black bars around the edges, another matrix is used to crop the image to the region of interest.
 On an actual example the loss of information in the picture is minimal, so that we do not need to worry that important parts of the image are cropped.
 
 \includenamedimage[0.7]{distortionExample.png}{No distortion on the left while the middle example shows positive radial distortion and the right example shows negative radial distortion~\cite{OpenCV2016}}{Distortion Example}
@@ -121,4 +126,3 @@ The focal length of the used camera is known~\cite{AppleInc.2019} but unfortunat
 When shooting a video, the camera automatically crops in an undocumented amount and only uses part of the sensor.
 Therefore, the effective focal length needs to be measured manually.
 This can be done by filming a real-world object of which the dimensions are known, such as a ruler from a known distance.
-

@@ -4,13 +4,11 @@ This chapter will give an overview on the improvements in performance and accura
 It will also highlight challenges and situations the system can't cope with.
 
 \section{Performance}
-FPS doubled
-Compare tiny yolo to normal yolo
 
 The various enhancements described in chapter~\ref{ch:enhancements} have a big impact on the overall performance of the system.
 When the first system used to run at around two frames per second (FPS) on a MacBook Pro from 2015, this iteration runs at four FPS or even eight without undistorting the frames.
 This translates to roughly 45 and 90 FPS respectively on a current high-power desktop machine with a capable GPU\@.
-Figure~\ref{fig:timing} shows how much time is consumed by each individual subsystem when working on a lengthy 4k video featuring a single car in every frame.
+Figure~\ref{fig:timing} shows how much time is consumed by each individual subsystem when working on a lengthy 4k video, featuring a single car in every frame.
 As is evident from that pie chart, most of the time is spent correcting for the lens distortion.
 This is an expensive operation as it is done on relatively large images with a resolution of $3840 \times 2160$ pixel.
 One needs to decide if it is worth to take this performance hit or to rather trade it for a little higher error margin in the speed estimation.
@@ -21,7 +19,7 @@ In my testing the tiny variant achieves around $95\%$ of the detections compared
 
 Finding and validating a license plate within the image patch of a car is pretty quick and takes around 40ms of which the validation is roughly a fourth.
 This is because it is working on vastly smaller image files.
-While the license plate detection works only on sections of the original frame containing a vehicle the validation of the plates runs on images of $150 \times 50$ pixels.
+While the license plate detection works only on sections of the original frame containing a vehicle, the validation of the plates runs on images of $150 \times 50$ pixels.
 
 The remaining time can be attributed to cropping of images, saving the resulting files and the time measurement itself.
 
@@ -48,7 +46,7 @@ The remaining time can be attributed to cropping of images, saving the resulting
 The first iteration of this project had two main accuracy measures: the vehicle detection and the license plate extraction.
 As they did not change significantly from the first project, this section focuses on a new measure: the speed estimation and its accuracy compared to ground truth.
 
-To obtain video footage with ground truth speed a path of \SI{60}{\metre} was measured and a car was driven along it multiple times.
+To obtain video footage with ground truth speed a path of \SI{60}{\metre} was measured and a car was driven along it multiple times with different constant speeds.
 The time was taken with a stopwatch to be able to calculate the speed as accurately as possible.
 Figure~\ref{fig:speedMeasurement.png} shows a sample frame from one of these videos in which you can see the car and one of the marker pales on the right.
 
@@ -76,13 +74,13 @@ Table~\ref{tab:speedEstimation} shows the calculated ground truth speed in compa
 \end{table}
 
 All in all, the results are looking promising as the deviation from the ground truth is rather small.
-The results are on par with other non-intrusive speed measurement techniques such as a laser or radar gun~\cite{Adnan2013}.
+The results are on par with other non-intrusive speed measurement techniques such as those of a laser or radar gun~\cite{Adnan2013}.
 Of course, the ground truth in itself is not perfect and gets less precise the higher the speed is.
 That is why only examples of moderate speed are used as a validation set here.
 
 The general rule is the system will be more accurate the lower the driving speed is, as it has more frames to sample data from.
 It can reliably detect license plates when they are roughly 10 pixels or more in height which translates into a 30m distance from the camera to the plate when filming in 4k on an iPhone XR.
-As the plates are generally in focus up to a distance of 3m, this results into a test distance of 27m.
+As the plates are generally in focus up to a distance of roughly 3m, this results into a test distance of 27m.
 A vehicle going by with an average speed of \SI{25}{\kilo\metre\per\hour} will pass this test track in \SI{3.88}{\second} resulting in up to 232 frames and therefore measuring points and a high precision in speed estimation.
 But as doubling the initial speed will half the time the vehicle needs to pass the test track, the maximum number of measuring points is also halved.
 Motion blur at higher speeds will further impact the accuracy of the results in a negative way.
