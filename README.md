@@ -1,4 +1,4 @@
-# Prototype for Real-Time License Plate Extraction using YOLOv3
+# Prototype for speed estimation of vehicles in videos using license plate tracking with YOLOv3
 
 ### Example frame:
 ![Example frame](./../images/images/example.png?raw=true)
