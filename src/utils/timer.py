@@ -1,3 +1,4 @@
+"""Functions used to measure the execution time of a wrapped function"""
 from collections import Counter
 from functools import wraps
 from time import time
@@ -9,6 +10,10 @@ total_time_per_function = Counter()
 
 
 def timing(function_to_time):
+    """
+    Annotation which can be used to time the execution time of a wrapped function.
+    It stores the number of invocation and the total execution time internally.
+    """
     @wraps(function_to_time)
     def wrapper(*args, **kwargs):
         start = time()
@@ -22,6 +27,9 @@ def timing(function_to_time):
 
 
 def print_timing_results():
+    """
+    Prints out the internally stored function calls with their respective execution times
+    """
     headers = ["Function", "# calls", " total time", "time per call"]
     rows = []
     for func in number_of_calls.keys():

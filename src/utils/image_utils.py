@@ -8,7 +8,7 @@ from src.utils.timer import timing
 
 
 def letterbox_image(image, desired_size):
-    """resize image with unchanged aspect ratio using padding"""
+    """resize image with unchanged aspect ratio using padding (width, height)"""
 
     ih, iw = image.shape[:2]
     w, h = desired_size
@@ -29,7 +29,7 @@ def letterbox_image(image, desired_size):
 
 
 def take_center_square(image):
-    """take the center square of the original image"""
+    """take the center square of the original image and returns it"""
 
     height, width = image.shape[:2]
     min_dimension = min(height, width)
@@ -41,7 +41,7 @@ def take_center_square(image):
 
 
 def resize_image(image, desired_size):
-    """resize image to desired size"""
+    """resize image to desired size (width, height)"""
 
     resized_image = cv2.resize(image, desired_size)
 
@@ -49,6 +49,7 @@ def resize_image(image, desired_size):
 
 
 def get_image_patch_from_rect(image, rect):
+    """Returns the specified area from the image"""
     top, left, bottom, right = rect
     size = (right - left, bottom - top)
     center = (left + size[0] / 2, top + size[1] / 2)
@@ -56,6 +57,7 @@ def get_image_patch_from_rect(image, rect):
 
 
 def get_image_patch_from_contour(image, contour):
+    """Returns the specified area from the image"""
     x, y, w, h = cv2.boundingRect(contour)
     size = (int(w * 1.2), int(h * 1.5))
     center = (x + w / 2, y + h / 2)
@@ -63,12 +65,17 @@ def get_image_patch_from_contour(image, contour):
 
 
 def show(image, label="image"):
+    """Displays the image (optionally with a label) and halts the program until any key is pressed"""
     cv2.imshow(label, image)
     cv2.waitKey()
 
 
 @timing
 def save_debug_image(image, filename, folder=None, resize_to=None):
+    """
+    Saves a given image under a specified filename.
+    Optionally within a folder and resizing it (width, height)
+    """
     if resize_to is not None:
         image = cv2.resize(image, resize_to)
     if folder:
@@ -79,6 +86,9 @@ def save_debug_image(image, filename, folder=None, resize_to=None):
 
 
 def get_frames(path_to_video, from_sec=0, to_sec=None):
+    """
+    Generator that reads a video file from disk and yields a color correct frame at a time
+    """
     fullpath = os.path.abspath(path_to_video)
     video = VideoFileClip(fullpath, audio=False).subclip(from_sec, to_sec)
     for frame in video.iter_frames():
@@ -87,6 +97,14 @@ def get_frames(path_to_video, from_sec=0, to_sec=None):
 
 
 def draw_rectangle(image, box, color=(0, 0, 255), thickness=2, offset=(0, 0)):
+    """
+    Draws a rectangle on the provided image
+    :param image: Image to draw on
+    :param box: Box specifying the upper left and lower right corner of the rectangle
+    :param color: Color of the rectangle
+    :param thickness: Thickness of the border
+    :param offset: Offset towards the upper left corner of the image
+    """
     top, left, bottom, right = [int(x) for x in box]
     offset_y, offset_x = [int(x) for x in offset]
 
@@ -99,6 +117,10 @@ def draw_rectangle(image, box, color=(0, 0, 255), thickness=2, offset=(0, 0)):
 
 
 def draw_processed_image(frame):
+    """Draws information found in the frame onto the image and returns it:
+    - Box around found vehicles
+    - Valid plates marked in green, invalid ones in red
+    """
     image_copy = frame.image
     for vehicle in frame.vehicles:
         draw_rectangle(image_copy, vehicle.box)
