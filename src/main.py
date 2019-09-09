@@ -1,3 +1,10 @@
+"""
+This is the main entrypoint to the application
+
+Given a video file and the appropriate camera calibration data, it runs the conv net and estimates the velocity
+of the vehicle in the video.
+"""
+
 import time
 
 from src.Video import Frame, Video
@@ -8,12 +15,16 @@ from src.speed_estimation.SpeedEstimator import SpeedEstimator
 from src.utils import timer
 from src.utils.image_utils import save_debug_image, get_image_patch_from_rect, get_frames, draw_processed_image
 
+VIDEO_FILE = "../testFiles/25,74kmh.mov"
+
+CAMERA_MODEL = "camera_calibration/camera_calibration_iPhoneXR_4k_60.npz"
+
 if __name__ == "__main__":
     yolo = YOLO()
     license_plate_detection = LicensePlateDetection()
-    camera_calibration = CameraCalibration("camera_calibration/camera_calibration_iPhoneXR_4k_60.npz")
+    camera_calibration = CameraCalibration(CAMERA_MODEL)
     start = time.time()
-    video = Video("../testFiles/25,74kmh.mov")
+    video = Video(VIDEO_FILE)
     for frame_number, image in enumerate(get_frames(video.path_to_file, from_sec=7, to_sec=9)):
         image = camera_calibration.undistort(image)
         frame = Frame(frame_number, image)

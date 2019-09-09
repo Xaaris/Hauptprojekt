@@ -5,6 +5,13 @@ from numpy.core.multiarray import ndarray
 
 @dataclass
 class Plate:
+    """
+    Contains information about a found license plate such as:
+    valid: If the image contains a license plate
+    confidence: how confident the validation network is, that this is a license plate
+    height: height of the license plate in pixel
+    box: upper left and lower right corner of the license plate
+    """
     valid = False
     confidence: float = 0
     height: float = 0
@@ -13,6 +20,7 @@ class Plate:
 
 @dataclass
 class Vehicle:
+    """Class that contains information about one vehicle, where it is located and potential license plates"""
     box: [int, int, int, int] = field(default_factory=list)
     plates: [Plate] = field(default_factory=list)
 
@@ -36,5 +44,6 @@ class Frame:
 
 @dataclass
 class Video:
+    """Contains all information about a processed video file"""
     path_to_file: str
     frames: [Frame] = field(default_factory=list)
