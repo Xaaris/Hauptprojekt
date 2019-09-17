@@ -1,3 +1,11 @@
+"""
+A simple script used to sort images into two categories: license plates and non license plate images. It randomly
+displays images from the 'path_originals' folder and and the user can press the 'y' and 'n' keys to specify if the image
+contains a license plate or not. In case of an accidental press, the 'r' takes you back to the last image. The loop
+continues until all images have been labeled or the 'c' key is pressed to terminate it. The script will then ask you
+whether you want to move the labeled images into two separate folders, 'positives' and 'negatives'. You can confirm
+with the 'y' key or deny by pressing the 'n' key.
+"""
 import glob
 import os
 

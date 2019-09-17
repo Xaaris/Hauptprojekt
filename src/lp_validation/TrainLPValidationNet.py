@@ -22,6 +22,7 @@ epochs = 12
 img_rows, img_cols = 50, 150
 number_of_channels = 3
 
+
 def read_data_set(path_to_images):
     filenames = glob.glob(os.path.join(path_to_images, '*.png'))
     images = []
