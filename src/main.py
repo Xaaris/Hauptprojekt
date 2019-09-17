@@ -45,4 +45,4 @@ if __name__ == "__main__":
     timer.print_timing_results()
 
     estimator = SpeedEstimator()
-    estimator.estimate_speed_of_vehicle(video)
+    print("\nEstimated final velocity: " + str(estimator.estimate_speed_of_vehicle(video)) + " km/h")

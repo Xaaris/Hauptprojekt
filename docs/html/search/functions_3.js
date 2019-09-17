@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['non_5fmax_5fsuppression_77',['non_max_suppression',['../namespacesrc_1_1car__detection_1_1model.html#a2007af565ef540f5031b4411e42768c3',1,'src::car_detection::model']]]
+  ['letterbox_5fimage_78',['letterbox_image',['../namespacesrc_1_1utils_1_1image__utils.html#afcadfc22ae9d2558f45a1665776aa7cd',1,'src::utils::image_utils']]]
 ];

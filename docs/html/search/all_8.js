@@ -1,24 +1,4 @@
 var searchData=
 [
-  ['camera_5fcalibration_17',['camera_calibration',['../namespacesrc_1_1camera__calibration.html',1,'src']]],
-  ['car_5fdetection_18',['car_detection',['../namespacesrc_1_1car__detection.html',1,'src']]],
-  ['datalabeling_19',['dataLabeling',['../namespacesrc_1_1lp__validation_1_1data_labeling.html',1,'src::lp_validation']]],
-  ['image_5futils_20',['image_utils',['../namespacesrc_1_1utils_1_1image__utils.html',1,'src::utils']]],
-  ['licenseplatedetection_21',['LicensePlateDetection',['../namespacesrc_1_1lp__localization_1_1_license_plate_detection.html',1,'src::lp_localization']]],
-  ['lp_5flocalization_22',['lp_localization',['../namespacesrc_1_1lp__localization.html',1,'src']]],
-  ['lp_5fmeasurement_23',['lp_measurement',['../namespacesrc_1_1lp__measurement.html',1,'src']]],
-  ['lp_5fvalidation_24',['lp_validation',['../namespacesrc_1_1lp__validation.html',1,'src']]],
-  ['lpvalidationnetwithdataaugmentation_25',['LPValidationNetWithDataAugmentation',['../namespacesrc_1_1lp__validation_1_1_l_p_validation_net_with_data_augmentation.html',1,'src::lp_validation']]],
-  ['main_26',['main',['../namespacesrc_1_1main.html',1,'src']]],
-  ['model_27',['model',['../namespacesrc_1_1car__detection_1_1model.html',1,'src::car_detection']]],
-  ['save_5fdebug_5fimage_28',['save_debug_image',['../namespacesrc_1_1utils_1_1image__utils.html#a66457d0289a690c8f084b5ca488560f8',1,'src::utils::image_utils']]],
-  ['scale_5fboxes_5fto_5foriginal_5fimage_5fsize_29',['scale_boxes_to_original_image_size',['../namespacesrc_1_1car__detection_1_1model.html#aaed25222061764ac29d1d50b7deb9718',1,'src::car_detection::model']]],
-  ['show_30',['show',['../namespacesrc_1_1utils_1_1image__utils.html#afde6c6394fa70e528cb6ba6a7bc209b0',1,'src::utils::image_utils']]],
-  ['speed_5festimation_31',['speed_estimation',['../namespacesrc_1_1speed__estimation.html',1,'src']]],
-  ['speedestimator_32',['SpeedEstimator',['../classsrc_1_1speed__estimation_1_1_speed_estimator_1_1_speed_estimator.html',1,'src::speed_estimation::SpeedEstimator']]],
-  ['src_33',['src',['../namespacesrc.html',1,'']]],
-  ['timer_34',['timer',['../namespacesrc_1_1utils_1_1timer.html',1,'src::utils']]],
-  ['trainlpvalidationnet_35',['TrainLPValidationNet',['../namespacesrc_1_1lp__validation_1_1_train_l_p_validation_net.html',1,'src::lp_validation']]],
-  ['utils_36',['utils',['../namespacesrc_1_1utils.html',1,'src']]],
-  ['yolo_37',['yolo',['../namespacesrc_1_1car__detection_1_1yolo.html',1,'src::car_detection']]]
+  ['resize_5fimage_17',['resize_image',['../namespacesrc_1_1utils_1_1image__utils.html#afb6f2a13309507a1aafdf26f392f25aa',1,'src::utils::image_utils']]]
 ];

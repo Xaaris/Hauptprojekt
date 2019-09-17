@@ -3,23 +3,23 @@ from src.Video import Video, Frame
 
 class SpeedEstimator:
 
-    # LENS_FACTOR = 361 # iPhone 8+ 4k 60
-    LENS_FACTOR = 343 # iPhone XR 4k 60
+    # LENS_FACTOR = 361  # iPhone 8+ 4k 60
+    LENS_FACTOR = 343  # iPhone XR 4k 60
     FRAME_RATE = 60
 
     def estimate_speed_of_vehicle(self, video: Video):
+        """
+        Takes a fully processed 'Video' file and calculates the speed of the first car it finds by calculating the
+        distance travelled between frames based on the height of the license plate in each frame.
+        """
         first_frame_with_valid_plate = self._first_frame_with_valid_plate(video)
         last_frame_with_valid_plate = self._last_frame_with_valid_plate(video)
         trimmed_video = video.frames[first_frame_with_valid_plate:last_frame_with_valid_plate + 1]
 
         speed_estimations = [s for s in self._yield_speed_estimations(trimmed_video)]
 
-        for i in range(len(speed_estimations)):
-            tmp_speed = sum(speed_estimations[:i]) / (i + 1)
-            print("Velocity estimation until " + str(i) + ": " + str(tmp_speed) + " km/h")
-
         average_speed = sum(speed_estimations) / len(speed_estimations)
-        print("\nEstimated final velocity: " + str(average_speed) + " km/h")
+        return average_speed
 
     def _yield_speed_estimations(self, trimmed_video):
         last_plate_height = self._get_plate_height_of_first_valid_plate(trimmed_video[0])

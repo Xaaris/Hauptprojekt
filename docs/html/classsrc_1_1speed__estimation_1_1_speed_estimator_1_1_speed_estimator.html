@@ -76,8 +76,7 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aee34358cd07c60208559fe2a693c2013"><td class="memItemLeft" align="right" valign="top"><a id="aee34358cd07c60208559fe2a693c2013"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>estimate_speed_of_vehicle</b> (self, <a class="el" href="classsrc_1_1_video_1_1_video.html">Video</a> video)</td></tr>
+<tr class="memitem:aee34358cd07c60208559fe2a693c2013"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsrc_1_1speed__estimation_1_1_speed_estimator_1_1_speed_estimator.html#aee34358cd07c60208559fe2a693c2013">estimate_speed_of_vehicle</a> (self, <a class="el" href="classsrc_1_1_video_1_1_video.html">Video</a> video)</td></tr>
 <tr class="separator:aee34358cd07c60208559fe2a693c2013"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
@@ -89,6 +88,37 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>LENS_FACTOR</b> = 343<
 int&#160;</td><td class="memItemRight" valign="bottom"><b>FRAME_RATE</b> = 60</td></tr>
 <tr class="separator:ac39d5fec06af8caeaa687f58da8c80e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aee34358cd07c60208559fe2a693c2013"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee34358cd07c60208559fe2a693c2013">&#9670;&nbsp;</a></span>estimate_speed_of_vehicle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def src.speed_estimation.SpeedEstimator.SpeedEstimator.estimate_speed_of_vehicle </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsrc_1_1_video_1_1_video.html">Video</a>&#160;</td>
+          <td class="paramname"><em>video</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<pre class="fragment">Takes a fully processed 'Video' file and calculates the speed of the first car it finds
+by calculating the distance travelled between frames based on the height of the license plate in each frame
+</pre> 
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>speed_estimation/SpeedEstimator.py</li>
 </ul>

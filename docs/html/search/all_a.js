@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['vehicle_40',['Vehicle',['../classsrc_1_1_video_1_1_vehicle.html',1,'src::Video']]],
-  ['video_41',['Video',['../classsrc_1_1_video_1_1_video.html',1,'src::Video']]]
+  ['take_5fcenter_5fsquare_39',['take_center_square',['../namespacesrc_1_1utils_1_1image__utils.html#ad866ae51364e449e33f2b6fb1b144ebc',1,'src::utils::image_utils']]],
+  ['timing_40',['timing',['../namespacesrc_1_1utils_1_1timer.html#afbf04cc29fc232ae753d13e01c5a14e8',1,'src::utils::timer']]]
 ];

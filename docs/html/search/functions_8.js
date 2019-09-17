@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['yolo_5feval_86',['yolo_eval',['../namespacesrc_1_1car__detection_1_1model.html#a1d5d57c8b9fb233261150f8aa10fe5c1',1,'src::car_detection::model']]],
-  ['yolo_5fhead_87',['yolo_head',['../namespacesrc_1_1car__detection_1_1model.html#affa45a8d5a86ee767476142877af28fb',1,'src::car_detection::model']]]
+  ['take_5fcenter_5fsquare_86',['take_center_square',['../namespacesrc_1_1utils_1_1image__utils.html#ad866ae51364e449e33f2b6fb1b144ebc',1,'src::utils::image_utils']]],
+  ['timing_87',['timing',['../namespacesrc_1_1utils_1_1timer.html#afbf04cc29fc232ae753d13e01c5a14e8',1,'src::utils::timer']]]
 ];
