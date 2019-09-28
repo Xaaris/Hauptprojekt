@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['draw_5fprocessed_5fimage_76',['draw_processed_image',['../namespacesrc_1_1utils_1_1image__utils.html#a0b30d9f4cb7a13ae21d174abe631469f',1,'src::utils::image_utils']]],
-  ['draw_5frectangle_77',['draw_rectangle',['../namespacesrc_1_1utils_1_1image__utils.html#aef041e2584b337f28af3189cc28d6287',1,'src::utils::image_utils']]]
+  ['best_5ffit_5fline_5ffrom_5fpoints_86',['best_fit_line_from_points',['../namespacesrc_1_1lp__measurement_1_1lp__measurement.html#a1ca5b0dbee7fac29d0c4333a8756ec1a',1,'src::lp_measurement::lp_measurement']]]
 ];

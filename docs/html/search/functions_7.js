@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['save_5fdebug_5fimage_88',['save_debug_image',['../namespacesrc_1_1utils_1_1image__utils.html#a66457d0289a690c8f084b5ca488560f8',1,'src::utils::image_utils']]],
-  ['scale_5fboxes_5fto_5foriginal_5fimage_5fsize_89',['scale_boxes_to_original_image_size',['../namespacesrc_1_1car__detection_1_1model.html#aaed25222061764ac29d1d50b7deb9718',1,'src::car_detection::model']]],
-  ['show_90',['show',['../namespacesrc_1_1utils_1_1image__utils.html#afde6c6394fa70e528cb6ba6a7bc209b0',1,'src::utils::image_utils']]]
+  ['perfect_5fline_103',['perfect_line',['../namespacesrc_1_1lp__measurement_1_1lp__measurement.html#a14beb9a39f7b8b312afec6f371d6a424',1,'src::lp_measurement::lp_measurement']]],
+  ['predict_104',['predict',['../namespacesrc_1_1lp__validation_1_1_l_p_validation_net_with_data_augmentation.html#a0ca5dbc3f8c78f2c4297d28d09a58675',1,'src::lp_validation::LPValidationNetWithDataAugmentation']]],
+  ['print_5ftiming_5fresults_105',['print_timing_results',['../namespacesrc_1_1utils_1_1timer.html#af84119424ea05ccc6d3c6b1f2cf5cefd',1,'src::utils::timer']]],
+  ['process_5fyolo_5flayer_5foutput_106',['process_yolo_layer_output',['../namespacesrc_1_1car__detection_1_1model.html#ac36590f6aab0c8783ded199b411b78c7',1,'src::car_detection::model']]]
 ];

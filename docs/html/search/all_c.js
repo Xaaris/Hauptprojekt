@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['yolo_46',['YOLO',['../classsrc_1_1car__detection_1_1yolo_1_1_y_o_l_o.html',1,'src::car_detection::yolo']]],
-  ['yolo_5feval_47',['yolo_eval',['../namespacesrc_1_1car__detection_1_1model.html#a1d5d57c8b9fb233261150f8aa10fe5c1',1,'src::car_detection::model']]],
-  ['yolo_5fhead_48',['yolo_head',['../namespacesrc_1_1car__detection_1_1model.html#affa45a8d5a86ee767476142877af28fb',1,'src::car_detection::model']]]
+  ['validate_5fplates_53',['validate_plates',['../classsrc_1_1lp__validation_1_1_l_p_validation_1_1_l_p_validation.html#a7d6e02caf4ecaea27c9d9f0e3386b74e',1,'src::lp_validation::LPValidation::LPValidation']]],
+  ['vehicle_54',['Vehicle',['../classsrc_1_1_video_1_1_vehicle.html',1,'src::Video']]],
+  ['video_55',['Video',['../classsrc_1_1_video_1_1_video.html',1,'src::Video']]]
 ];

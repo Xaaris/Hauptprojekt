@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['estimate_5fspeed_5fof_5fvehicle_5',['estimate_speed_of_vehicle',['../classsrc_1_1speed__estimation_1_1_speed_estimator_1_1_speed_estimator.html#aee34358cd07c60208559fe2a693c2013',1,'src::speed_estimation::SpeedEstimator::SpeedEstimator']]]
+  ['draw_5fprocessed_5fimage_4',['draw_processed_image',['../namespacesrc_1_1utils_1_1image__utils.html#a0b30d9f4cb7a13ae21d174abe631469f',1,'src::utils::image_utils']]],
+  ['draw_5frectangle_5',['draw_rectangle',['../namespacesrc_1_1utils_1_1image__utils.html#aef041e2584b337f28af3189cc28d6287',1,'src::utils::image_utils']]]
 ];

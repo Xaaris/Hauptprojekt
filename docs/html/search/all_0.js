@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['cameracalibration_0',['CameraCalibration',['../classsrc_1_1camera__calibration_1_1_camera_calibration_1_1_camera_calibration.html',1,'src::camera_calibration::CameraCalibration']]],
-  ['camera_20calibration_1',['Camera Calibration',['../md_camera_calibration__camera_calibration.html',1,'']]],
-  ['car_20detection_2',['Car Detection',['../md_car_detection__y_o_l_ov3.html',1,'']]]
+  ['best_5ffit_5fline_5ffrom_5fpoints_0',['best_fit_line_from_points',['../namespacesrc_1_1lp__measurement_1_1lp__measurement.html#a1ca5b0dbee7fac29d0c4333a8756ec1a',1,'src::lp_measurement::lp_measurement']]]
 ];

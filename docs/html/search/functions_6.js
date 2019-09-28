@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['resize_5fimage_87',['resize_image',['../namespacesrc_1_1utils_1_1image__utils.html#afb6f2a13309507a1aafdf26f392f25aa',1,'src::utils::image_utils']]]
+  ['non_5fmax_5fsuppression_102',['non_max_suppression',['../namespacesrc_1_1car__detection_1_1model.html#a2007af565ef540f5031b4411e42768c3',1,'src::car_detection::model']]]
 ];
