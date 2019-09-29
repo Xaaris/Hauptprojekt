@@ -61,7 +61,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="namespacesrc.html">src</a></li><li class="navelem"><a class="el" href="namespacesrc_1_1lp__localization.html">lp_localization</a></li><li class="navelem"><b>LicensePlateDetectionCascadeClassifier</b></li><li class="navelem"><a class="el" href="classsrc_1_1lp__localization_1_1_license_plate_detection_cascade_classifier_1_1_license_plate_detection.html">LicensePlateDetection</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacesrc.html">src</a></li><li class="navelem"><a class="el" href="namespacesrc_1_1lp__localization.html">lp_localization</a></li><li class="navelem"><a class="el" href="namespacesrc_1_1lp__localization_1_1_license_plate_detection_cascade_classifier.html">LicensePlateDetectionCascadeClassifier</a></li><li class="navelem"><a class="el" href="classsrc_1_1lp__localization_1_1_license_plate_detection_cascade_classifier_1_1_license_plate_detection.html">LicensePlateDetection</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -79,11 +79,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa5930ffdaf4de14e2ae1438e01dc421e"><td class="memItemLeft" align="right" valign="top"><a id="aa5930ffdaf4de14e2ae1438e01dc421e"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><b>__init__</b> (self)</td></tr>
 <tr class="separator:aa5930ffdaf4de14e2ae1438e01dc421e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54540d1bf9d6dbd63054651e86d73dde"><td class="memItemLeft" align="right" valign="top"><a id="a54540d1bf9d6dbd63054651e86d73dde"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>detect_license_plate_candidates</b> (self, image, debug_mode=False)</td></tr>
+<tr class="memitem:a54540d1bf9d6dbd63054651e86d73dde"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsrc_1_1lp__localization_1_1_license_plate_detection_cascade_classifier_1_1_license_plate_detection.html#a54540d1bf9d6dbd63054651e86d73dde">detect_license_plate_candidates</a> (self, image, debug_mode=False)</td></tr>
 <tr class="separator:a54540d1bf9d6dbd63054651e86d73dde"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9394db929acebfcb685a6a0b016bc10"><td class="memItemLeft" align="right" valign="top"><a id="ad9394db929acebfcb685a6a0b016bc10"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>process_image</b> (self, image, debug_mode)</td></tr>
+<tr class="memitem:ad9394db929acebfcb685a6a0b016bc10"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsrc_1_1lp__localization_1_1_license_plate_detection_cascade_classifier_1_1_license_plate_detection.html#ad9394db929acebfcb685a6a0b016bc10">process_image</a> (self, image, debug_mode)</td></tr>
 <tr class="separator:ad9394db929acebfcb685a6a0b016bc10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1592ebd118b1ab6a4b10cc126ad936df"><td class="memItemLeft" align="right" valign="top"><a id="a1592ebd118b1ab6a4b10cc126ad936df"></a>
 def&#160;</td><td class="memItemRight" valign="bottom"><b>measure_plate_height</b> (self, image, plate)</td></tr>
@@ -98,6 +96,76 @@ Public Attributes</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>validator</b></td></tr>
 <tr class="separator:a542ac44cd265a83ed9a3053feff285c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a54540d1bf9d6dbd63054651e86d73dde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54540d1bf9d6dbd63054651e86d73dde">&#9670;&nbsp;</a></span>detect_license_plate_candidates()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def src.lp_localization.LicensePlateDetectionCascadeClassifier.LicensePlateDetection.detect_license_plate_candidates </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>image</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>debug_mode</em> = <code>False</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<pre class="fragment">Orchestrator method that combines the detection, validation and height measurement of license plates</pre> 
+</div>
+</div>
+<a id="ad9394db929acebfcb685a6a0b016bc10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9394db929acebfcb685a6a0b016bc10">&#9670;&nbsp;</a></span>process_image()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def src.lp_localization.LicensePlateDetectionCascadeClassifier.LicensePlateDetection.process_image </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>image</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>debug_mode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<pre class="fragment">Detects license plates in the given 'image' using haar features. 'debug_mode' can be set to true to save the
+found image patches for debugging</pre> 
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>lp_localization/LicensePlateDetectionCascadeClassifier.py</li>
 </ul>

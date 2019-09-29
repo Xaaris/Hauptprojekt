@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['speedestimator_64',['SpeedEstimator',['../classsrc_1_1speed__estimation_1_1_speed_estimator_1_1_speed_estimator.html',1,'src::speed_estimation::SpeedEstimator']]]
+  ['speedestimator_67',['SpeedEstimator',['../classsrc_1_1speed__estimation_1_1_speed_estimator_1_1_speed_estimator.html',1,'src::speed_estimation::SpeedEstimator']]]
 ];

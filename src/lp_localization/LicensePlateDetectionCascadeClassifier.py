@@ -1,3 +1,4 @@
+"""This detector uses a trained haar cascade classifier to find license plates within images"""
 import os
 
 import cv2.cv2 as cv2
@@ -12,12 +13,15 @@ from src.utils.timer import timing
 class LicensePlateDetection:
 
     def __init__(self):
+        # Loading the classifier
         path_to_xml_classifier_file = os.path.abspath("lp_localization/lp_cascade.xml")
         self.classifier = cv2.CascadeClassifier(path_to_xml_classifier_file)
+        # Initializing the plate validator
         self.validator = LPValidation()
 
     @timing
     def detect_license_plate_candidates(self, image, debug_mode=False):
+        """Orchestrator method that combines the detection, validation and height measurement of license plates"""
         plate_candidates = self.process_image(image, debug_mode)
         self.validator.validate_plates(image, plate_candidates)
         for plate in plate_candidates:
@@ -26,6 +30,8 @@ class LicensePlateDetection:
         return plate_candidates
 
     def process_image(self, image, debug_mode):
+        """Detects license plates in the given 'image' using haar features. 'debug_mode' can be set to true to save the
+        found image patches for debugging"""
         gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         lps = self.classifier.detectMultiScale(gray_image)
 
