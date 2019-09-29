@@ -52,7 +52,7 @@ def process_yolo_layer_output(feats, anchors, num_classes, input_shape, image_sh
     box_scores = box_confidence * box_class_probs
     highest_score_indexes = K.argmax(box_scores, axis=-1)
     box_classes = K.reshape(highest_score_indexes, [-1])
-    highest_scores = K.max(highest_score_indexes, axis=-1)
+    highest_scores = K.max(box_scores, axis=-1)
     highest_box_scores = K.reshape(highest_scores, [-1])
 
     boxes = scale_boxes_to_original_image_size(box_xy, box_wh, image_shape)
