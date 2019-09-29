@@ -86,7 +86,7 @@ Functions</h2></td></tr>
 <tr class="separator:a2007af565ef540f5031b4411e42768c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><pre class="fragment">YOLO_v3 Model Defined in Keras.</pre> </div><h2 class="groupheader">Function Documentation</h2>
+<div class="textblock"><pre class="fragment">YOLO_v3 Model Defined in Keras</pre> </div><h2 class="groupheader">Function Documentation</h2>
 <a id="a2007af565ef540f5031b4411e42768c3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2007af565ef540f5031b4411e42768c3">&#9670;&nbsp;</a></span>non_max_suppression()</h2>
 
@@ -136,7 +136,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Applies Non-max suppression (NMS) to set of boxes
+<pre class="fragment">Applies Non-max suppression (NMS) to a set of boxes
 
 Arguments:
 scores -- tensor of shape (None,), output of yolo_filter_boxes()
@@ -144,6 +144,7 @@ boxes -- tensor of shape (None, 4), output of yolo_filter_boxes() that have been
 classes -- tensor of shape (None,), output of yolo_filter_boxes()
 max_boxes -- integer, maximum number of predicted boxes you'd like
 iou_threshold -- real value, "intersection over union" threshold used for NMS filtering
+score_threshold -- real value, minimum score used for NMS filtering
 
 Returns:
 scores -- tensor of shape (, None), predicted score for each box
@@ -232,7 +233,7 @@ function will transpose the shapes of scores, boxes, classes. This is made for c
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Get corrected boxes</pre> 
+<pre class="fragment">Scale boxes from internal representation back to original image shape</pre> 
 </div>
 </div>
 <a id="a1d5d57c8b9fb233261150f8aa10fe5c1"></a>
@@ -290,7 +291,7 @@ function will transpose the shapes of scores, boxes, classes. This is made for c
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Evaluate YOLO model on given input and return filtered boxes.</pre> 
+<pre class="fragment">Evaluate YOLO model on given input and return nms filtered boxes.</pre> 
 </div>
 </div>
 <a id="affa45a8d5a86ee767476142877af28fb"></a>
@@ -330,7 +331,7 @@ function will transpose the shapes of scores, boxes, classes. This is made for c
         </tr>
       </table>
 </div><div class="memdoc">
-<pre class="fragment">Convert final layer features to bounding box parameters.</pre> 
+<pre class="fragment">Convert final layer features to bounding box parameters</pre> 
 </div>
 </div>
 </div><!-- contents -->

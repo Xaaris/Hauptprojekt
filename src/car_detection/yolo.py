@@ -13,16 +13,16 @@ from src.Video import Vehicle
 from src.car_detection.model import yolo_eval
 from src.utils.timer import timing
 from src.utils.image_utils import resize_image
-from tensorflow.python import debug as tf_debug
+from tensorflow.python import debug as tf_debug  # only used for debugging during development
 
 
 @timing
-class YOLO(object):
+class YOLO:
     _defaults = {
-        # "model_path": 'car_detection/model_data/yolo.h5',
-        # "anchors_path": 'car_detection/model_data/yolo_anchors.txt',
-        "model_path": 'car_detection/model_data/yolo_tiny.h5',
-        "anchors_path": 'car_detection/model_data/tiny_yolo_anchors.txt',
+        "model_path": 'car_detection/model_data/yolo.h5',
+        "anchors_path": 'car_detection/model_data/yolo_anchors.txt',
+        # "model_path": 'car_detection/model_data/yolo_tiny.h5',
+        # "anchors_path": 'car_detection/model_data/tiny_yolo_anchors.txt',
         "classes_path": 'car_detection/model_data/coco_classes.txt',
         "score": 0.3,
         "iou": 0.45,
@@ -30,24 +30,20 @@ class YOLO(object):
         "gpu_num": 1,
     }
 
-    @classmethod
-    def get_defaults(cls, parameter_name):
-        if parameter_name in cls._defaults:
-            return cls._defaults[parameter_name]
-        else:
-            return "Unrecognized attribute name '" + parameter_name + "'"
-
     def __init__(self):
         self.__dict__.update(self._defaults)  # set up default values
-        self.class_names = self._get_class()
+        self.class_names = self._get_classes()
         self.anchors = self._get_anchors()
         self.sess = K.get_session()
+
+        # Use this for debugging
         # sess = tf_debug.LocalCLIDebugWrapperSession(self.sess)
         # K.set_session(sess)
         # self.sess = K.get_session()
+
         self.boxes, self.scores, self.classes = self.generate()
 
-    def _get_class(self):
+    def _get_classes(self):
         classes_path = os.path.expanduser(self.classes_path)
         with open(classes_path) as f:
             class_names = f.readlines()
@@ -62,6 +58,7 @@ class YOLO(object):
         return np.array(anchors).reshape(-1, 2)
 
     def generate(self):
+        """Loads the model and sets it up"""
         model_path = os.path.expanduser(self.model_path)
         assert model_path.endswith('.h5'), 'Keras model or weights must be a .h5 file.'
 
@@ -84,11 +81,13 @@ class YOLO(object):
         return boxes, scores, classes
 
     @timing
-    def detect_vehicle(self, image):
+    def detect_vehicle(self, image) -> [Vehicle]:
+        """Runs the yolo network on this 'image' and returns a list of found vehicles"""
+
+        # Preparing the input data
         height, width, _ = image.shape
         resized_image = resize_image(image, self.model_image_size)
         image_data = np.array(resized_image, dtype='float32')
-
         image_data /= 255.
         image_data = np.expand_dims(image_data, 0)  # Add batch dimension.
 
@@ -101,9 +100,11 @@ class YOLO(object):
                 K.learning_phase(): 0
             })
 
+        # Resolve class names
         out_class_names = [self.class_names[class_index] for class_index in out_classes]
         # print("Found the following objects: " + str(out_class_names))
 
+        # Filter for vehicles only
         vehicles: [Vehicle] = []
         for i, class_name in enumerate(out_class_names):
             if class_name == "car" or class_name == "bus" or class_name == "truck":

@@ -1,16 +1,16 @@
-"""YOLO_v3 Model Defined in Keras."""
+"""YOLO_v3 Model Defined in Keras"""
 
 import tensorflow as tf
 from tensorflow.python.keras import backend as K
 
 
 def yolo_head(feats, anchors, num_classes, input_shape):
-    """Convert final layer features to bounding box parameters."""
+    """Convert final layer features to bounding box parameters"""
     num_anchors = len(anchors)
     # Reshape to batch, height, width, num_anchors, box_params.
     anchors_tensor = K.reshape(K.constant(anchors), [1, 1, 1, num_anchors, 2])
 
-    grid_shape = K.shape(feats)[1:3]  # height, width
+    grid_shape = K.shape(feats)[1:3]  # height, width (13 x 13)
     grid_y = K.tile(K.reshape(K.arange(0, stop=grid_shape[0]), [-1, 1, 1, 1]), [1, grid_shape[1], 1, 1])
     grid_x = K.tile(K.reshape(K.arange(0, stop=grid_shape[1]), [1, -1, 1, 1]), [grid_shape[0], 1, 1, 1])
     grid = K.concatenate([grid_x, grid_y])
@@ -18,7 +18,7 @@ def yolo_head(feats, anchors, num_classes, input_shape):
 
     feats = K.reshape(feats, [-1, grid_shape[0], grid_shape[1], num_anchors, num_classes + 5])
 
-    # Adjust preditions to each spatial grid point and anchor size.
+    # Adjust predictions to each spatial grid point and anchor size.
     box_xy = (K.sigmoid(feats[..., :2]) + grid) / K.cast(grid_shape[::-1], K.dtype(feats))
     box_wh = K.exp(feats[..., 2:4]) * anchors_tensor / K.cast(input_shape[::-1], K.dtype(feats))
     box_confidence = K.sigmoid(feats[..., 4:5])
@@ -28,8 +28,7 @@ def yolo_head(feats, anchors, num_classes, input_shape):
 
 
 def scale_boxes_to_original_image_size(box_xy, box_wh, image_shape):
-    """Get corrected boxes"""
-
+    """Scale boxes from internal representation back to original image shape"""
     box_mins = box_xy - (box_wh / 2.)
     box_maxes = box_xy + (box_wh / 2.)
 
@@ -42,7 +41,7 @@ def scale_boxes_to_original_image_size(box_xy, box_wh, image_shape):
 
     # Scale boxes back to original image shape.
     scaling_tensor = K.concatenate([image_shape, image_shape])
-    boxes *= scaling_tensor
+    boxes = boxes * scaling_tensor
     return boxes
 
 
@@ -51,15 +50,15 @@ def process_yolo_layer_output(feats, anchors, num_classes, input_shape, image_sh
     box_xy, box_wh, box_confidence, box_class_probs = yolo_head(feats, anchors, num_classes, input_shape)
 
     box_scores = box_confidence * box_class_probs
-    box_classes = K.argmax(box_scores, axis=-1)
-    box_classes = K.reshape(box_classes, [-1])
-    box_scores = K.max(box_scores, axis=-1)
-    box_scores = K.reshape(box_scores, [-1])
+    highest_score_indexes = K.argmax(box_scores, axis=-1)
+    box_classes = K.reshape(highest_score_indexes, [-1])
+    highest_scores = K.max(highest_score_indexes, axis=-1)
+    highest_box_scores = K.reshape(highest_scores, [-1])
 
     boxes = scale_boxes_to_original_image_size(box_xy, box_wh, image_shape)
     boxes = K.reshape(boxes, [-1, 4])
 
-    return boxes, box_scores, box_classes
+    return boxes, highest_box_scores, box_classes
 
 
 def yolo_eval(yolo_outputs,
@@ -69,9 +68,9 @@ def yolo_eval(yolo_outputs,
               score_threshold,
               iou_threshold,
               max_boxes=20):
-    """Evaluate YOLO model on given input and return filtered boxes."""
-    num_layers = len(yolo_outputs)
-    anchor_mask = [[6, 7, 8], [3, 4, 5], [0, 1, 2]] if num_layers == 3 else [[3, 4, 5], [1, 2, 3]]  # default or tiny
+    """Evaluate YOLO model on given input and return nms filtered boxes."""
+    num_layers = len(yolo_outputs)  # This refers to the different scales at which yolo detects objects
+    anchor_mask = [[6, 7, 8], [3, 4, 5], [0, 1, 2]] if num_layers == 3 else [[3, 4, 5], [1, 2, 3]]  # default or tiny yolo
     input_shape = K.shape(yolo_outputs[0])[1:3] * 32
     boxes = []
     box_scores = []
@@ -92,7 +91,7 @@ def yolo_eval(yolo_outputs,
 
 def non_max_suppression(scores, boxes, classes, max_boxes=10, iou_threshold=0.5, score_threshold=0.3):
     """
-    Applies Non-max suppression (NMS) to set of boxes
+    Applies Non-max suppression (NMS) to a set of boxes
 
     Arguments:
     scores -- tensor of shape (None,), output of yolo_filter_boxes()
@@ -100,6 +99,7 @@ def non_max_suppression(scores, boxes, classes, max_boxes=10, iou_threshold=0.5,
     classes -- tensor of shape (None,), output of yolo_filter_boxes()
     max_boxes -- integer, maximum number of predicted boxes you'd like
     iou_threshold -- real value, "intersection over union" threshold used for NMS filtering
+    score_threshold -- real value, minimum score used for NMS filtering
 
     Returns:
     scores -- tensor of shape (, None), predicted score for each box
