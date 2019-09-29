@@ -1,3 +1,8 @@
+"""
+Code adapted from
+https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_calib3d/py_calibration/py_calibration.html
+"""
+
 import glob
 
 import cv2.cv2 as cv2
@@ -8,6 +13,9 @@ from src.utils.timer import timing
 
 
 class CameraCalibration:
+    """
+    Class used to get rid of distortion in images. It needs a calculated calibration matrix for each new camera model.
+    """
 
     def __init__(self, path_to_camera_model_file):
         self.camera_matrix, self.distortion_coeffs, self.camera_matrix_with_crop = load_calibration_data(path_to_camera_model_file)
@@ -79,6 +87,7 @@ def undistort(image_path, camera_matrix, distortion_coeffs, camera_matrix_with_c
     cv2.waitKey()
 
 
+# For local development/debugging
 if __name__ == "__main__":
     calculate_camera_matrix_and_distortion_coefficients("iPhoneXR_4k_60")
     camera_matrix, distortion_coeffs, camera_matrix_with_crop = load_calibration_data("camera_calibration_iPhoneXR_4k_60.npz")

@@ -92,6 +92,7 @@ def get_frames(path_to_video, from_sec=0, to_sec=None):
     fullpath = os.path.abspath(path_to_video)
     video = VideoFileClip(fullpath, audio=False).subclip(from_sec, to_sec)
     for frame in video.iter_frames():
+        # We have to switch the order of channels as opencv has a different order as they are coming from the camera
         color_corrected_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         yield color_corrected_frame
 
