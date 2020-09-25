@@ -3,4 +3,4 @@ moviepy==1.0.0.0
 numpy==1.16.2
 opencv-contrib-python==4.0.0.21
 tabulate==0.8.3
-tensorflow==1.14.0
+tensorflow==1.15.4
